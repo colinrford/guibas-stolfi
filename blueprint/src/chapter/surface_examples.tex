@@ -37,8 +37,8 @@ orientation proof uses separate quotient charts.
 \begin{definition}[Sphere model and cells]\label{def:loop-sphere}
   \uses{def:point-line-disk}
   %\lean{GuibasStolfi.LoopSphere.sphereHomeomorph, GuibasStolfi.LoopSphere.vertex,
-        GuibasStolfi.LoopSphere.edge, GuibasStolfi.LoopSphere.north,
-        GuibasStolfi.LoopSphere.south}
+  %      GuibasStolfi.LoopSphere.edge, GuibasStolfi.LoopSphere.north,
+  %      GuibasStolfi.LoopSphere.south}
 
   Use the one-point compactification $\mathbb C\cup\{\infty\}$, identified
   with the unit sphere in $\mathbb R^3$. Choose $p\in S^1$. The cells are
@@ -49,7 +49,7 @@ orientation proof uses separate quotient charts.
 \begin{proposition}[Sphere subdivision]\label{prop:loop-sphere-subdivision}
   \uses{def:loop-sphere, def:subdivision, def:simple-path}
   %\lean{GuibasStolfi.LoopSphere.subdivision, GuibasStolfi.LoopSphere.vertices_count,
-        GuibasStolfi.LoopSphere.edges_count, GuibasStolfi.LoopSphere.faces_count}
+  %      GuibasStolfi.LoopSphere.edges_count, GuibasStolfi.LoopSphere.faces_count}
 
   These cells form a subdivision with one vertex, one loop edge, and two faces.
 \end{proposition}
@@ -83,7 +83,7 @@ This topological construction is separate from the finite algebra
 
 \begin{definition}[Torus model and cells]\label{def:torus-cells}
   %\lean{GuibasStolfi.Torus.standardTorus, GuibasStolfi.Torus.vertex,
-        GuibasStolfi.Torus.horizontal, GuibasStolfi.Torus.vertical, GuibasStolfi.Torus.face}
+  %      GuibasStolfi.Torus.horizontal, GuibasStolfi.Torus.vertical, GuibasStolfi.Torus.face}
 
   Let $T=(\mathbb R/\mathbb Z)^2$, homeomorphic to Mathlib's
   two-dimensional unit torus. Its vertex is $(0,0)$, its two open edges
@@ -94,8 +94,8 @@ This topological construction is separate from the finite algebra
 \begin{proposition}[Torus subdivision]\label{prop:torus-subdivision}
   \uses{def:torus-cells, def:square-path, def:subdivision}
   %\lean{GuibasStolfi.Torus.subdivision, GuibasStolfi.Torus.vertices_count,
-        GuibasStolfi.Torus.edges_count, GuibasStolfi.Torus.faces_count,
-        GuibasStolfi.Torus.edges_are_loops}
+  %      GuibasStolfi.Torus.edges_count, GuibasStolfi.Torus.faces_count,
+  %      GuibasStolfi.Torus.edges_are_loops}
 
   The torus cells form a subdivision with one vertex, two loop edges, and one face.
 \end{proposition}
@@ -116,7 +116,7 @@ This topological construction is separate from the finite algebra
 
 \begin{definition}[Klein bottle model]\label{def:klein-quotient}
   %\lean{GuibasStolfi.KleinBottle.flip, GuibasStolfi.KleinBottle.relation,
-        GuibasStolfi.KleinBottle.projection_eq_iff, GuibasStolfi.KleinBottle.flip_ne}
+  %      GuibasStolfi.KleinBottle.projection_eq_iff, GuibasStolfi.KleinBottle.flip_ne}
 
   Put $C=(\mathbb R/2\mathbb Z)\times(\mathbb R/\mathbb Z)$ and
   $\tau(u,v)=(u+[1],-v)$. This is a fixed-point-free involutive homeomorphism.
@@ -127,8 +127,8 @@ This topological construction is separate from the finite algebra
 \begin{lemma}[Square gluing and local charts]\label{lem:klein-charts}
   \uses{def:klein-quotient}
   %\lean{GuibasStolfi.KleinBottle.horizontal_gluing, GuibasStolfi.KleinBottle.vertical_gluing,
-        GuibasStolfi.KleinBottle.rectangle_embedding, GuibasStolfi.KleinBottle.canonical_surjective,
-        GuibasStolfi.KleinBottle.isTwoManifold}
+  %      GuibasStolfi.KleinBottle.rectangle_embedding, GuibasStolfi.KleinBottle.canonical_surjective,
+  %      GuibasStolfi.KleinBottle.isTwoManifold}
 
   The map $q_K(x,y)=\pi([x]_2,[y]_1)$ satisfies
   \[
@@ -155,8 +155,8 @@ This topological construction is separate from the finite algebra
 \begin{proposition}[Klein bottle subdivision]\label{prop:klein-subdivision}
   \uses{lem:klein-charts, def:square-path, def:subdivision}
   %\lean{GuibasStolfi.KleinBottle.subdivision, GuibasStolfi.KleinBottle.vertices_count,
-        GuibasStolfi.KleinBottle.edges_count, GuibasStolfi.KleinBottle.faces_count,
-        GuibasStolfi.KleinBottle.edges_are_loops}
+  %      GuibasStolfi.KleinBottle.edges_count, GuibasStolfi.KleinBottle.faces_count,
+  %      GuibasStolfi.KleinBottle.edges_are_loops}
 
   The $q_K$-images of $\{(0,0)\}$, $(0,1)\times\{0\}$,
   $\{0\}\times(0,1)$, and $(0,1)^2$ form a subdivision with one vertex,
@@ -189,7 +189,7 @@ This topological construction is separate from the finite algebra
 
 \begin{definition}[Credited combinatorial reference]\label{def:klein-triangulation}
   %\lean{GuibasStolfi.KleinBottleTriangulation.triangles,
-        GuibasStolfi.KleinBottleTriangulation.simplices}
+  %      GuibasStolfi.KleinBottleTriangulation.simplices}
 
   Take the 18 Klein bottle triangles from Clara L\"oh's Lean 3 project
   \emph{Exploring Formalisation}, and their finite downward closure on
@@ -208,10 +208,10 @@ has been proved.
 \begin{lemma}[Finite counts and incidence]\label{lem:klein-triangulation-counts}
   \uses{def:klein-triangulation}
   %\lean{GuibasStolfi.KleinBottleTriangulation.subset_closed,
-        GuibasStolfi.KleinBottleTriangulation.vertices_count,
-        GuibasStolfi.KleinBottleTriangulation.edges_count,
-        GuibasStolfi.KleinBottleTriangulation.triangles_count,
-        GuibasStolfi.KleinBottleTriangulation.every_edge_has_two_triangles}
+  %      GuibasStolfi.KleinBottleTriangulation.vertices_count,
+  %      GuibasStolfi.KleinBottleTriangulation.edges_count,
+  %      GuibasStolfi.KleinBottleTriangulation.triangles_count,
+  %      GuibasStolfi.KleinBottleTriangulation.every_edge_has_two_triangles}
 
   The simplex set is downward closed, with 9 vertices, 27 edges, and 18
   triangles. Each edge belongs to exactly two listed triangles.

@@ -19,9 +19,9 @@ not ready. Their dependency arrows describe the proposed proof route.
 \begin{lemma}[Transport of oriented atlases]\label{lem:orientation-invariant}
   \uses{def:oriented-atlas, def:isomorphism-equivalent}
   %\lean{GuibasStolfi.OrientedAtlas.isManifold,
-        GuibasStolfi.hasOrientedAtlas_iff_of_homeomorph,
-        GuibasStolfi.Subdivision.Equivalent.hasOrientedAtlas_iff}
-  
+  %      GuibasStolfi.hasOrientedAtlas_iff_of_homeomorph,
+  %      GuibasStolfi.Subdivision.Equivalent.hasOrientedAtlas_iff}
+
   An oriented atlas supplies a Mathlib smooth manifold structure. Existence
   of an oriented atlas is invariant under arbitrary homeomorphisms, and hence
   under subdivision equivalence.
@@ -37,8 +37,8 @@ not ready. Their dependency arrows describe the proposed proof route.
 \begin{lemma}[Torus interval-lift atlas]\label{lem:torus-lift-atlas}
   \uses{def:torus-cells}
   %\lean{GuibasStolfi.Torus.orientationChartedSpace,
-        GuibasStolfi.Torus.transition_locally_translation,
-        GuibasStolfi.Torus.transition_det_eq_one}
+  %      GuibasStolfi.Torus.transition_locally_translation,
+  %      GuibasStolfi.Torus.transition_det_eq_one}
 
   Lift the two circle coordinates into intervals $(a_i,a_i+1)$. These
   charts cover every torus point. Every overlap transition is locally a
@@ -72,7 +72,7 @@ not ready. Their dependency arrows describe the proposed proof route.
 \begin{lemma}[The lifted gluing reverses plane orientation]\label{lem:klein-twist}
   \uses{def:klein-quotient}
   %\lean{GuibasStolfi.KleinBottle.quotientMap_twist,
-        GuibasStolfi.KleinBottle.twist_det_eq_neg_one}
+  %      GuibasStolfi.KleinBottle.twist_det_eq_neg_one}
 
   For $g(x,y)=(x+1,-y)$ one has $q_K\circ g=q_K$, and $\det Dg=-1$.
 \end{lemma}
@@ -85,7 +85,7 @@ not ready. Their dependency arrows describe the proposed proof route.
 \begin{lemma}[Sign-change obstruction]\label{lem:klein-sign-obstruction}
   \uses{def:klein-quotient}
   %\lean{GuibasStolfi.KleinBottle.exists_zero_of_flip_antiinvariant,
-        GuibasStolfi.KleinBottle.no_nonzero_flip_antiinvariant}
+  %      GuibasStolfi.KleinBottle.no_nonzero_flip_antiinvariant}
 
   Every continuous $f:C\to\mathbb R$ satisfying $f(\tau(p))=-f(p)$
   vanishes somewhere. In particular, such a function cannot be everywhere nonzero.
@@ -118,7 +118,7 @@ coordinates alone does not establish that implication.
 
 \begin{definition}[Relative singular integral homology]\label{def:relative-homology}
   %\lean{GuibasStolfi.LocalOrientation.singularPairFunctor,
-        GuibasStolfi.LocalOrientation.relativeHomologyFunctor}
+  %      GuibasStolfi.LocalOrientation.relativeHomologyFunctor}
 
   Apply the singular simplicial set functor to a topological pair $(M,A)$,
   then take Mathlib's relative simplicial homology with coefficient object
@@ -138,8 +138,8 @@ coordinates alone does not establish that implication.
 \begin{lemma}[Exactly two generators, conditionally]\label{lem:two-local-generators}
   \uses{def:local-orientation}
   %\lean{GuibasStolfi.OrientationGenerator.eq_or_eq_reverse,
-        GuibasStolfi.OrientationGenerator.signEquiv,
-        GuibasStolfi.OrientationGenerator.reverse_ne}
+  %      GuibasStolfi.OrientationGenerator.signEquiv,
+  %      GuibasStolfi.OrientationGenerator.reverse_ne}
 
   Given one additive equivalence $o:\mathbb Z\to G$, all such equivalences
   are exactly $o$ and $n\mapsto o(-n)$, and these are distinct.
@@ -156,7 +156,7 @@ The plane computation required for that conclusion is still open in this develop
 \begin{definition}[Coherent homological orientation]\label{def:coherent-orientation}
   \uses{def:local-orientation}
   %\lean{GuibasStolfi.LocalOrientation.toLocal,
-        GuibasStolfi.LocalOrientation.IsCoherent, GuibasStolfi.LocalOrientation.Coherent}
+  %      GuibasStolfi.LocalOrientation.IsCoherent, GuibasStolfi.LocalOrientation.Coherent}
 
   For $x\in U$, complement inclusion gives a map
   $\rho_{U,x}:H_2(M,M\setminus U;\mathbb Z)\to L_x(M)$.
@@ -168,9 +168,9 @@ The plane computation required for that conclusion is still open in this develop
 \begin{lemma}[Homeomorphism invariance of coherence]\label{lem:homological-orientation-invariant}
   \uses{def:coherent-orientation, def:isomorphism-equivalent}
   %\lean{GuibasStolfi.LocalOrientation.relativeHomeomorph_natural,
-        GuibasStolfi.LocalOrientation.nonempty_coherent_iff,
-        GuibasStolfi.LocalOrientation.isCoherent_reverse,
-        GuibasStolfi.Subdivision.Equivalent.nonempty_coherent_iff}
+  %      GuibasStolfi.LocalOrientation.nonempty_coherent_iff,
+  %      GuibasStolfi.LocalOrientation.isCoherent_reverse,
+  %      GuibasStolfi.Subdivision.Equivalent.nonempty_coherent_iff}
 
   Arbitrary homeomorphisms transport coherent homological orientations.
   Existence is therefore invariant under subdivision equivalence. Reversing

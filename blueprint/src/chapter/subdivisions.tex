@@ -198,7 +198,7 @@ result below needs that hypothesis, it is stated explicitly.
       \begin{lemma}\label{lem:face-boundary}
         \uses{def:bounding-path}
         %\lean{GuibasStolfi.Subdivision.frontier_face,
-              GuibasStolfi.Subdivision.isConnected_frontier_face}
+        %      GuibasStolfi.Subdivision.isConnected_frontier_face}
 
         $\pi_F$ is a closed, connected path of edges and vertices of $S$, whose
         union is the boundary $\overline{F} \setminus F$ of $F$.
@@ -279,7 +279,7 @@ result below needs that hypothesis, it is stated explicitly.
       \begin{definition}[Endpoints, loop]\label{def:endpoints}
         \uses{def:subdivision, def:separable}
         %\lean{GuibasStolfi.Subdivision.endpoints,
-              GuibasStolfi.Subdivision.IsLoop}
+        %      GuibasStolfi.Subdivision.IsLoop}
 
         The \emph{endpoints} of an edge $e$ are the vertices of $S$ incident to
         $e$. If $e$ has only one endpoint, $e$ is a \emph{loop}.
@@ -375,8 +375,8 @@ result below needs that hypothesis, it is stated explicitly.
     \begin{lemma}\label{lem:shapes-distinct}
       \uses{def:point-line-disk}
       %\lean{GuibasStolfi.not_homeomorphic_point_line,
-            GuibasStolfi.not_homeomorphic_point_disk,
-            GuibasStolfi.not_homeomorphic_line_disk}
+      %      GuibasStolfi.not_homeomorphic_point_disk,
+      %      GuibasStolfi.not_homeomorphic_line_disk}
 
       No point is homeomorphic to a line or a disk, and no line is homeomorphic
       to a disk.
@@ -392,9 +392,9 @@ result below needs that hypothesis, it is stated explicitly.
     \begin{lemma}\label{lem:iso-preserves-type}
       \uses{def:isomorphism-equivalent}
       %\lean{GuibasStolfi.Subdivision.Iso.mapsTo_vertices,
-            GuibasStolfi.Subdivision.Iso.mapsTo_edges,
-            GuibasStolfi.Subdivision.Iso.mapsTo_faces,
-            GuibasStolfi.Subdivision.Iso.symm}
+      %      GuibasStolfi.Subdivision.Iso.mapsTo_edges,
+      %      GuibasStolfi.Subdivision.Iso.mapsTo_faces,
+      %      GuibasStolfi.Subdivision.Iso.symm}
 
       An isomorphism maps vertices onto vertices, edges onto edges, and faces
       onto faces.
