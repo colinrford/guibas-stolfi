@@ -1,0 +1,634 @@
+\chapter{Subdivisions}
+
+This chapter follows Guibas--Stolfi, pp.~77--80, with enough intermediate
+steps to read alongside the Lean proofs. The Lean files are the source of truth.
+The ambient plane in Lean is $\mathbb C$, viewed as a real plane.
+The local definition of a manifold does not include Hausdorffness; whenever a
+result below needs that hypothesis, it is stated explicitly.
+
+  % % % section for preliminaries leading up to definition 1.1
+  \section{Preliminaries}
+
+    % % % definition of separable, incident
+    \begin{definition}[Separable, incident]\label{def:separable}
+      %\lean{GuibasStolfi.Separable, GuibasStolfi.Incident}
+
+      Subsets $A$, $B$, of a topological space $M$ are \emph{separable} if some
+      neighborhood of $A$ is disjoint from some neighborhood of $B$; otherwise
+      they are \emph{incident}.
+    \end{definition}
+
+    \begin{lemma}\label{lem:incident-of-closure}
+      \uses{def:separable}
+      %\lean{GuibasStolfi.incident_of_mem_closure}
+
+      If $A$ meets $\overline{B}$, then $A$ and $B$ are incident.
+    \end{lemma}
+    \begin{proof}
+
+      Let $x \in A \cap \overline{B}$. Every neighbourhood of $A$ is a
+      neighbourhood of $x$, so it meets every neighbourhood of $B$.
+    \end{proof}
+
+    % % % lemma relating paper's separable to mathlib4's separatedNhds
+    \begin{lemma}\label{lem:separable-iff}
+      \uses{def:separable}
+      %\lean{GuibasStolfi.separable_iff_separatedNhds}
+
+      $A$ and $B$ are separable if and only if they lie in disjoint open sets.
+    \end{lemma}
+    \begin{proof}
+
+      Every neighborhood (open or closed) contains an open neighborhood
+    \end{proof}
+
+    % % % definitions of points, lines, disks
+    \begin{definition}[Point, line, disk]\label{def:point-line-disk}
+      %\lean{GuibasStolfi.IsPoint, GuibasStolfi.IsLine, GuibasStolfi.IsDisk}
+
+      A \emph{point} of $M$ is a one-element subset $\{ p \}$.
+      A \emph{line} of $M$ is a subspace homeomorphic to $B_1 = (0, 1)$.
+      A \emph{disk} of $M$ is a subspace homeomorphic to $B_2 = \{ x \in
+      \mathbb{R}^2 : |x| < 1 \}$.
+    \end{definition}
+
+    % % % definition of 2 manifold
+    \begin{definition}[2-manifold]\label{def:manifold}
+      \uses{def:point-line-disk}
+      %\lean{GuibasStolfi.IsTwoManifold}
+
+      A topological space in which every point has an open neighborhood which
+      is a disk.
+    \end{definition}
+
+    % % % lemma relating our 2 manifold to mathlib4's charted space
+    \begin{lemma}\label{lem:manifold-charted}
+      \uses{def:manifold}
+      %\lean{GuibasStolfi.isTwoManifold_iff_chartedSpace}
+
+      $M$ is a 2-manifold if and only if it admits a charted-space structure
+      modeled on $\mathbb{R}^2$.
+    \end{lemma}
+    \begin{proof}
+
+      An open disk is homeomorphic to $\mathbb{R}^2$. Conversely, every point
+      of an open subset of $\mathbb{R}^2$ has neighbourhood that is a disk.
+    \end{proof}
+
+    \begin{definition}[Partition]\label{def:partition}
+      %\lean{Setoid.IsPartition}
+
+      \mathlibok
+      A collection $C$ of subsets of $M$ is a \emph{partition} of $M$ if no
+      member of $C$ is empty and every point of $M$ lies in exactly one member
+      of $C$.
+    \end{definition}
+
+  % % % section on subdivisions
+  \section{Subdivisions}
+
+    % % % definition of simple path
+    \begin{definition}[Simple path in $S^1$]\label{def:simple-path}
+      \uses{def:partition}
+      %\lean{GuibasStolfi.SimplePath}
+
+      A \emph{simple path} in $S^1$ consists of distinct subsets
+      $P_0,\ldots,P_m$, indexed cyclically modulo $m+1$, which partition $S^1$.
+      Each $P_i$ is a singleton or an open subset of $S^1$ homeomorphic to
+      $(0,1)$, and $P_i\cup P_{i+1}$ is connected for every $i$.
+    \end{definition}
+    Cyclic adjacency is explicit data in Lean. The word ``isolated'' refers
+    to the point pieces of this partition, not to isolated points of the
+    circle as a topological space. The one-point, one-arc partition is allowed.
+
+    % % % definition 1.1, subdivision of a manifold
+    \begin{definition}[Subdivision]\label{def:subdivision}
+      \uses{def:manifold, def:point-line-disk, def:partition, def:simple-path}
+      %\lean{GuibasStolfi.Subdivision}
+
+      A \emph{subdivision} of a 2-manifold $M$ is a partition $S$ of $M$ into
+      three finite sets of disjoint parts, the \emph{vertices} $\mathscr{V}
+      \mathscr{S}$, the \emph{edges} $\mathscr{E} \mathscr{S}$, and
+      \emph{faces} $\mathscr{F} \mathscr{S}$, with the following properties:
+      \begin{description}
+        % S1
+        \item[S1] every vertex is a point of $M$
+
+        % S2
+        \item[S2] every edge is a line of $M$
+
+        % S3
+        \item[S3] every face is a disk of $M$
+
+        % S4
+        \item[S4] The boundary of every face is a closed path of edges and
+                  vertices. Precisely, for every face $F$ there is a
+                  simple path $\pi$ in $S^1$ and a continuous map
+                  $\phi_F : \overline{B_2} \to \overline{F}$ onto
+                  $\overline F$ that
+                  \begin{description}
+                    % % i % %
+                    \item[(i)] $\phi_F$ is a homeomorphism from $B_2$ onto $F$
+
+                    % % ii % %
+                    \item[(ii)] maps each arc of $\pi$ homeomorphically onto an
+                                edge of $S$
+
+                    % % iii % %
+                    \item[(iii)] maps each isolated point of $\pi$ to a vertex
+                                 of $S$.
+                  \end{description}
+      \end{description}
+      The vertices, edges, and faces of a subdivision are called its
+      \emph{elements}.
+    \end{definition}
+    In Lean the map is defined on all of $\mathbb C$, with continuity required
+    only on the closed disk; its values outside that disk are irrelevant.
+    S4(ii) uses \emph{onto} an entire edge. This makes explicit the reading
+    used by the subsequent proofs; the paper's literal wording is ``into''.
+    Equivalence of these two formulations has not been proved here.
+
+    % % % consequences of S4, paper pp. 77--78
+      \begin{lemma}\label{lem:simple-path-alternate}
+        \uses{def:simple-path}
+        %\lean{GuibasStolfi.SimplePath.alternate}
+
+        If $P_i$ is an arc of a simple path, then
+        $\overline{P_i}=P_{i-1}\cup P_i\cup P_{i+1}$.
+      \end{lemma}
+      \begin{proof}
+
+        Connectedness of consecutive unions forces each neighboring piece to
+        be a singleton in the arc's closure: two disjoint nonempty open arcs
+        would disconnect their union. A preconnected subset of the circle
+        adds at most two points under closure, as can be seen by cutting the
+        circle outside that subset and lifting it to an interval. Any further
+        point of $\overline{P_i}$ would force the two neighboring singleton
+        pieces to coincide. Injectivity of the indexed partition then reduces
+        to the two-piece case, where no further piece exists. Thus these are
+        exactly the neighbors added by closure. For one point and one arc,
+        the two neighbors of the arc are the same singleton.
+      \end{proof}
+
+      \begin{lemma}\label{lem:arc-image}
+        \uses{def:subdivision, lem:simple-path-alternate, def:separable}
+        %\lean{GuibasStolfi.Subdivision.image_arc}
+
+        If $\alpha$ is the arc between two consecutive points $a$ and $b$ of
+        $\pi$, then its image $\phi_F(\alpha)$ is an edge incident to the
+        points $\phi_F(a)$ and $\phi_F(b)$.
+      \end{lemma}
+      \begin{proof}
+
+        \uses{lem:incident-of-closure}
+        By (ii) and (iii), $\phi_F(\alpha)$ is an edge and $\phi_F(a)$,
+        $\phi_F(b)$ are vertices. Since $a \in \overline{\alpha}$ and $\phi_F$
+        is continuous, $\phi_F(a) \in \overline{\phi_F(\alpha)}$; apply
+        \cref{lem:incident-of-closure}.
+      \end{proof}
+
+      \begin{definition}[Bounding path]\label{def:bounding-path}
+        \uses{def:subdivision, lem:simple-path-alternate}
+        %\lean{GuibasStolfi.Subdivision.boundingPath}
+
+        The images of the elements of $\pi$, taken in the order in which they
+        occur around $S^1$, form the \emph{bounding path} $\pi_F$ of $F$.
+      \end{definition}
+
+      \begin{lemma}\label{lem:face-boundary}
+        \uses{def:bounding-path}
+        %\lean{GuibasStolfi.Subdivision.frontier_face,
+              GuibasStolfi.Subdivision.isConnected_frontier_face}
+
+        $\pi_F$ is a closed, connected path of edges and vertices of $S$, whose
+        union is the boundary $\overline{F} \setminus F$ of $F$.
+      \end{lemma}
+      \begin{proof}
+
+        \uses{lem:arc-image}
+        $\phi_F$ maps $\overline{B_2}$ onto $\overline{F}$ and $B_2$ onto $F$.
+        The elements of $\pi$ map to vertices and edges, which are disjoint
+        from $F$ since $S$ is a partition; so
+        $\phi_F(S^1) = \overline{F} \setminus F$. It is connected as the
+        continuous image of $S^1$ (Mathlib: \texttt{isConnected\_sphere},
+        \texttt{IsConnected.image}).
+      \end{proof}
+
+      % Paper: pi_F need not be simple, since phi_F may take two or more
+      % distinct arcs or points of
+      % pi to the same element of S; so the closure of a face may not be a disk
+      % (Fig. 1).
+      Notice that the bounding path $\pi_F$ need not be simple, since $\phi_F$
+      may take two or more distinct arcs or points of $\pi$ to the same element
+      of $S$. Therefore the closure of a face may not be homeomorphic to a
+      disk, as Figure~1 of the paper shows.
+
+      \begin{lemma}\label{lem:no-finite-cover}
+        \uses{def:point-line-disk, def:manifold}
+        %\lean{GuibasStolfi.not_disk_subset_finite_union}
+
+        In a Hausdorff topological space, a disk is not contained in a finite
+        union of points and lines.
+      \end{lemma}
+      \begin{proof}
+
+        Write each line as a countable union of compact interval images.
+        Compact subsets are closed in the Hausdorff ambient space. Pull this
+        countable cover back along a homeomorphism from the plane onto the
+        disk. Baire's theorem on the plane gives a compact piece whose
+        preimage contains a nonempty open ball. This produces a continuous
+        injection of the plane into a point or into $(0,1)$. The former is
+        impossible by cardinality. For the latter, removing a point of the
+        plane leaves it connected, whereas an intermediate value between
+        two image points cannot be omitted. This contradicts injectivity.
+        No Baire assumption on the ambient space is needed.
+      \end{proof}
+
+      \begin{lemma}\label{lem:closures-cover}
+        \uses{def:subdivision, def:separable}
+        %\lean{GuibasStolfi.Subdivision.iUnion_closure_faces}
+
+        Assume $M$ is Hausdorff. The closures of the faces cover $M$:
+        $\bigcup_{F\in\FS}\overline F=M$.
+      \end{lemma}
+      \begin{proof}
+
+        \uses{lem:no-finite-cover, lem:face-boundary, def:manifold, lem:incident-of-closure}
+        $M \setminus \bigcup_F \overline{F}$ is open (finitely many faces) and
+        covered by edges and vertices; if nonempty it contains a disk,
+        contradicting \cref{lem:no-finite-cover}.
+      \end{proof}
+
+      \begin{lemma}\label{lem:edge-in-boundary}
+        \uses{def:subdivision}
+        %\lean{GuibasStolfi.Subdivision.edge_subset_frontier}
+
+        Assume $M$ is Hausdorff. Every edge is entirely contained in the
+        boundary of some face.
+      \end{lemma}
+      \begin{proof}
+
+        \uses{lem:closures-cover, lem:face-boundary}
+        Choose $x\in e$ and a face $F$ with $x\in\overline F$. The partition
+        forces $x\notin F$. Lift $x$ to the boundary circle under $\phi_F$.
+        Its path piece cannot map to a vertex, so it is an arc whose image
+        is an edge containing $x$. Partition uniqueness identifies that
+        edge with $e$. Surjectivity onto the whole edge gives the conclusion.
+      \end{proof}
+
+      \begin{definition}[Endpoints, loop]\label{def:endpoints}
+        \uses{def:subdivision, def:separable}
+        %\lean{GuibasStolfi.Subdivision.endpoints,
+              GuibasStolfi.Subdivision.IsLoop}
+
+        The \emph{endpoints} of an edge $e$ are the vertices of $S$ incident to
+        $e$. If $e$ has only one endpoint, $e$ is a \emph{loop}.
+      \end{definition}
+
+      \begin{lemma}[Closure of an edge]\label{lem:closure-edge}
+        \uses{lem:edge-in-boundary, lem:simple-path-alternate, def:subdivision}
+        %\lean{GuibasStolfi.Subdivision.closure_edge}
+
+        Assume $M$ is Hausdorff. For every edge $e$ there are vertices
+        $\{p\},\{q\}$ such that $\overline e=e\cup\{p,q\}$.
+      \end{lemma}
+      \begin{proof}
+
+        Write $e=\phi_F(P_i)$ for a boundary arc. Its closure in the circle
+        is the arc together with its two neighboring singleton pieces.
+        Continuity on this compact closure and Hausdorffness imply
+        $\overline{\phi_F(P_i)}=\phi_F(\overline{P_i})$.
+        S4 maps the two singleton pieces to vertices; their images may agree.
+      \end{proof}
+
+      \begin{lemma}\label{lem:endpoints-card}
+        \uses{def:endpoints}
+        %\lean{GuibasStolfi.Subdivision.endpoints_card}
+
+        Assume $M$ is Hausdorff. Every edge is incident to two (not
+        necessarily distinct) vertices of $S$.
+      \end{lemma}
+      \begin{proof}
+
+        \uses{lem:closure-edge, lem:compact, lem:arc-image}
+        By \cref{lem:edge-in-boundary} $e = \phi_F(\alpha)$ for an arc $\alpha$
+        between points $a, b$, and $\phi_F(a)$, $\phi_F(b)$ are endpoints
+        (\cref{lem:arc-image}). Conversely, $\overline{e} =
+        \phi_F(\overline{\alpha}) = e \cup \{\phi_F(a), \phi_F(b)\}$ (compact
+        image in a Hausdorff space), and a vertex outside $\overline{e}$ is
+        separable from $e$ by regularity.
+      \end{proof}
+
+      \begin{lemma}\label{lem:loop-circle}
+        \uses{def:subdivision, def:endpoints}
+        %\lean{GuibasStolfi.Subdivision.closure_loop_homeomorph_circle}
+
+        Assume $M$ is Hausdorff. The closure of a loop is homeomorphic to $S^1$.
+      \end{lemma}
+      \begin{proof}
+
+        \uses{lem:endpoints-card, lem:closure-edge, lem:compact}
+        The two vertices added under closure must be the same unique
+        endpoint, so $\overline e=e\cup\{p\}$ with $p\notin e$.
+        This is a compact Hausdorff space containing $e\cong(0,1)$ as the
+        complement of one point. It is therefore the one-point compactification
+        of $(0,1)$, homeomorphic to $S^1$. This also covers the one-point,
+        one-arc boundary path without treating its closure as a closed interval.
+      \end{proof}
+
+      \begin{lemma}\label{lem:compact}
+        \uses{def:subdivision}
+        %\lean{GuibasStolfi.Subdivision.compactSpace}
+
+        Assume $M$ is Hausdorff. Then $M$ is compact.
+      \end{lemma}
+      \begin{proof}
+
+        \uses{lem:closures-cover}
+        By \cref{lem:closures-cover}, the face closures cover $M$, and $\overline{F} =
+        \phi_F(\overline{B_2})$ is compact. Thus $M$ is a finite union of
+        compact sets. The Mathlib ingredients are:
+        \begin{quote}\small
+          \texttt{isCompact\_closedBall}, \texttt{IsCompact.image},\\
+          \texttt{Set.Finite.isCompact\_biUnion}.
+        \end{quote}
+      \end{proof}
+
+  % % % section 1.1 in paper, Equivalence and Connectivity
+  \section{Equivalence and Connectivity}
+
+    The isomorphism definitions and incidence invariance below do not require
+    Hausdorffness. The graph and connectivity results explicitly use it.
+
+    % % % definition 1.2, subdivision isomorphisms and equivalent subdivisions
+    \begin{definition}[Isomorphism, equivalent]\label{def:isomorphism-equivalent}
+      \uses{def:subdivision}
+      %\lean{GuibasStolfi.Subdivision.Iso, GuibasStolfi.Subdivision.Equivalent}
+
+      Let $S$ and $S'$ be two subdivisions of the manifolds $M$ and $M'$. An
+      \emph{isomorphism} from $S$ to $S'$ is a homeomorphism of $M$ onto $M'$
+      that maps each element of $S$ onto an element of $S'$. When such a
+      mapping exists, we say that $S$ and $S'$ are \emph{equivalent}, and we
+      write $S \sim S'$.
+    \end{definition}
+
+    \begin{lemma}\label{lem:shapes-distinct}
+      \uses{def:point-line-disk}
+      %\lean{GuibasStolfi.not_homeomorphic_point_line,
+            GuibasStolfi.not_homeomorphic_point_disk,
+            GuibasStolfi.not_homeomorphic_line_disk}
+
+      No point is homeomorphic to a line or a disk, and no line is homeomorphic
+      to a disk.
+    \end{lemma}
+    \begin{proof}
+
+      A point has one element; lines and disks are infinite. Removing any point
+      disconnects a line, but no disk: $B_2 \cong \mathbb{R}^2$, and
+      $\mathbb{R}^2 \setminus \{x\}$ is connected (Mathlib:
+      \texttt{isConnected\_compl\_singleton\_of\_one\_lt\_rank}).
+    \end{proof}
+
+    \begin{lemma}\label{lem:iso-preserves-type}
+      \uses{def:isomorphism-equivalent}
+      %\lean{GuibasStolfi.Subdivision.Iso.mapsTo_vertices,
+            GuibasStolfi.Subdivision.Iso.mapsTo_edges,
+            GuibasStolfi.Subdivision.Iso.mapsTo_faces,
+            GuibasStolfi.Subdivision.Iso.symm}
+
+      An isomorphism maps vertices onto vertices, edges onto edges, and faces
+      onto faces.
+    \end{lemma}
+    \begin{proof}
+
+      \uses{lem:shapes-distinct}
+      The image of an element is an element of $S'$ homeomorphic to it; apply
+      \cref{lem:shapes-distinct}. The inverse homeomorphism also maps elements
+      to elements: pull back one point of a target element and use partition
+      uniqueness to identify its whole preimage cell. Applying the same
+      shape argument to the inverse gives the bijections of cell families.
+    \end{proof}
+
+    \begin{lemma}\label{lem:iso-preserves-incidence}
+      \uses{def:isomorphism-equivalent, def:separable}
+      %\lean{GuibasStolfi.Subdivision.Iso.incident_iff}
+
+      An isomorphism preserves incidence: $A, B$ are incident iff $h(A), h(B)$
+      are.
+    \end{lemma}
+    \begin{proof}
+
+      A homeomorphism maps neighbourhoods to neighbourhoods, so it preserves
+      separability.
+    \end{proof}
+
+    % % % definition of......... topological property of subdivisions
+    \begin{definition}[Topological property]\label{def:topological-property}
+      \uses{def:subdivision, def:isomorphism-equivalent}
+      %\lean{GuibasStolfi.Subdivision.TopologicalProperty}
+
+      A \emph{topological property} of subdivisions is a property that is
+      invariant under equivalence.
+    \end{definition}
+
+    % % % definition for graph of a subdivision
+    \begin{definition}[Graph of subdivision]\label{def:graph}
+      \uses{def:subdivision, def:endpoints}
+      %\lean{GuibasStolfi.Subdivision.graph}
+
+      Assume $M$ is Hausdorff. The graph of $S$ has vertex set $\VS$ and
+      edge set $\ES$; an edge $e$ joins $u,v$ exactly when its endpoint set is
+      $\{u,v\}$. Thus loops and distinct edges with the same endpoints are allowed.
+    \end{definition}
+
+    % Stand-in: Mathlib's Graph has no connectivity yet
+    % (only Connected/EdgeCut.lean).
+    \begin{definition}[Connected graph]\label{def:graph-connected}
+      %\lean{GuibasStolfi.Graph.Connected}
+
+      A graph is \emph{connected} if any two vertices $u, v$ are joined by a
+      finite sequence of vertices $u = v_0, v_1, \dots, v_n = v$ in which
+      $v_{i-1}$ and $v_i$ are the ends of some edge.
+    \end{definition}
+
+    % Stand-in: Mathlib's Graph has no morphisms yet
+    % (Combinatorics/Graph/Maps.lean, TODO).
+    \begin{definition}[Graph isomorphism]\label{def:graph-iso}
+      %\lean{GuibasStolfi.Graph.Iso}
+
+      An \emph{isomorphism} of graphs is a pair of bijections, one between the
+      vertex sets and one between the edge sets, such that an edge joins $u$
+      and $v$ if and only if its image joins the images of $u$ and $v$.
+    \end{definition}
+
+    % % % lemma that equivalent subdivisions have isomorphic graphs
+    \begin{lemma}\label{lem:equiv-graph-iso}
+      \uses{def:subdivision, def:isomorphism-equivalent, def:graph, def:graph-iso}
+      %\lean{GuibasStolfi.Subdivision.Equivalent.graphIso}
+
+      For Hausdorff ambient spaces, the graphs of two equivalent subdivisions
+      $S$ and $S'$ are isomorphic.
+    \end{lemma}
+    \begin{proof}
+
+      \uses{lem:iso-preserves-type, def:endpoints, lem:iso-preserves-incidence}
+      Let $h$ be an isomorphism. By \cref{lem:iso-preserves-type},
+      $v \mapsto h(v)$ and $e \mapsto h(e)$ are bijections
+      $\mathscr{V}\mathscr{S} \to \mathscr{V}\mathscr{S}'$ and
+      $\mathscr{E}\mathscr{S} \to \mathscr{E}\mathscr{S}'$. Endpoints are
+      preserved because they are the incident vertices of the edge, and the
+      homeomorphism preserves incidence in both directions.
+    \end{proof}
+
+    % % % COUNTEREXAMPLE FOR CONVERSE: SEE FIGURE 2 IN PAPER, PG. 79
+    \begin{proposition}[Converse fails]\label{prop:graph-not-determining}
+      \notready
+      \uses{prop:torus-subdivision, prop:klein-subdivision, prop:torus-klein-graph,
+            prop:torus-klein-nonequivalent}
+      There exist subdivisions $S$, $S'$ whose graphs are isomorphic but
+      $S \not\sim S'$ (Fig.~2).
+    \end{proposition}
+    The two subdivision instances and their graph isomorphism are now
+    formalized later in this chapter. Nonequivalence remains open; the proposition
+    is not marked proved merely because its examples and graph map exist.
+
+    \begin{lemma}\label{lem:faces-open}
+      \uses{def:subdivision, def:separable}
+      %\lean{GuibasStolfi.Subdivision.isOpen_face}
+
+      Assume $M$ is Hausdorff. Every face is open in $M$; in particular
+      distinct faces are separable.
+    \end{lemma}
+    \begin{proof}
+
+      \uses{lem:face-boundary, lem:closures-cover, lem:endpoints-card, lem:separable-iff}
+      Let $F$ be a face. Every point of $M$ lies in exactly one element of $S$,
+      so
+        \[
+          M \setminus F \;=\; \bigcup_{v \in \mathscr{V}\mathscr{S}} v
+            \;\cup\; \bigcup_{e \in \mathscr{E}\mathscr{S}} \overline{e}
+            \;\cup\; \bigcup_{F' \in \mathscr{F}\mathscr{S},\, F' \neq F}
+            \overline{F'},
+        \]
+        provided each set on the right is disjoint from $F$. Vertices are
+        disjoint from $F$ since $S$ is a partition. For an edge $e$,
+        $\overline{e}$ consists of $e$ and its endpoints
+        (\cref{lem:endpoints-card}), all elements other than $F$. For a face
+        $F' \neq F$, $\overline{F'}$ is $F'$ together with the elements of
+        $\pi_{F'}$ (\cref{lem:face-boundary}), again all elements other than
+        $F$. Each set on the right is closed: vertices are points, which are
+        closed since $M$ is Hausdorff, and closures are closed. There are
+        finitely many, so $M \setminus F$ is closed and $F$ is open. Distinct
+        faces are then disjoint open sets, hence separable
+        (\cref{lem:separable-iff}).
+    \end{proof}
+
+    \begin{lemma}\label{lem:face-incident-edge}
+      \uses{def:subdivision, def:separable}
+      %\lean{GuibasStolfi.Subdivision.exists_edge_incident_face}
+
+      Every face is incident to some edge.
+    \end{lemma}
+    \begin{proof}
+
+      \uses{lem:incident-of-closure}
+      $S^1$ is not a finite set of points, so $\pi$ has an arc; its image is an
+      edge contained in $\overline{F}$ by (ii); apply
+      \cref{lem:incident-of-closure}.
+    \end{proof}
+
+    \begin{lemma}\label{lem:incident-union-connected}
+      \uses{def:separable}
+      %\lean{GuibasStolfi.IsConnected.union_of_incident}
+
+      In a completely normal space, if $A$ and $B$ are connected and incident,
+      then $A \cup B$ is connected.
+    \end{lemma}
+    \begin{proof}
+
+      If $x\in A\cap\overline B$, adjoining $x$ to $B$ preserves
+      preconnectedness, and the enlarged set meets $A$. Their union is
+      connected. The case $x\in\overline A\cap B$ is symmetric.
+      Otherwise $A,B$ are separated sets, and complete normality supplies
+      disjoint open neighborhoods, contradicting incidence.
+    \end{proof}
+
+    \begin{lemma}[Complete normality of a subdivided surface]\label{lem:completely-normal}
+      \uses{lem:manifold-charted, lem:compact}
+      %\lean{GuibasStolfi.Subdivision.completelyNormalSpace}
+
+      A subdivision with Hausdorff ambient space has completely normal
+      ambient space.
+    \end{lemma}
+    \begin{proof}
+
+      Its local disk neighborhoods supply a charted-space structure.
+      A compact Hausdorff manifold modeled on the plane is metrizable;
+      metrizability implies complete normality.
+    \end{proof}
+
+    % % % Theorem 1.1 in paper
+    \begin{theorem}\label{thm:graph-connected-iff}
+      \uses{def:graph, def:graph-connected}
+      %\lean{GuibasStolfi.Subdivision.graph_connected_iff}
+
+      Assume $M$ is Hausdorff. The graph of $S$ is connected if and only if
+      $M$ is preconnected, that is, $M$ has no separation into two nonempty
+      disjoint open sets. Both sides allow the empty case. For nonempty $M$
+      this agrees with the usual connected-space convention.
+    \end{theorem}
+    \begin{proof}
+
+      \uses{lem:faces-open, lem:face-boundary, lem:face-incident-edge,
+            lem:incident-union-connected, lem:completely-normal}
+      If the graph is connected, attach to each point a connected union of
+      cells containing a vertex. Join the resulting vertices by a graph path;
+      the union of these connected sets contains the original pair of points.
+      Incidence joins connected sets using complete normality.
+
+      Conversely, suppose two vertices are not joined. Group the vertices
+      and edges incident to vertices reachable from the first vertex, then
+      add all faces incident to that group. The group and its complement are
+      separable: incident vertices or edges have a common incident vertex;
+      a face cannot meet both groups on its connected boundary; distinct
+      faces are separable. Finiteness combines the pairwise separations into
+      disjoint open neighborhoods of the two groups. These cover $M$ and
+      each contains one of the chosen vertices, contradicting preconnectedness.
+    \end{proof}
+
+    \begin{lemma}\label{lem:restrict-component}
+      \uses{def:subdivision}
+      %\lean{GuibasStolfi.Subdivision.restrictComponent}
+
+      Assume $M$ is Hausdorff. Let $C$ be a connected component of $M$.
+      The elements of $S$ contained
+      in $C$ form a subdivision of $C$.
+    \end{lemma}
+    \begin{proof}
+
+      \uses{def:manifold}
+      Every element of $S$ is connected (a point, line or disk), so it lies in
+      exactly one component; hence the elements inside $C$ partition $C$. $M$
+      is locally connected, so $C$ is open (Mathlib:
+      \texttt{isOpen\_connectedComponent}) and therefore a 2-manifold.
+      (S1)--(S3) are unchanged, and for a face $F \subseteq C$, $\overline{F}$
+      is connected and meets $C$, so $\phi_F$ lands in $C$ and (S4) holds.
+    \end{proof}
+
+    \begin{corollary}\label{cor:components}
+      \uses{def:graph-connected, def:graph}
+      %\lean{GuibasStolfi.Subdivision.componentsEquiv}
+
+      Assume $M$ is Hausdorff. The connected components of the manifold are in one-to-one
+      correspondence with the connected components of the underlying graph.
+    \end{corollary}
+    \begin{proof}
+
+      \uses{thm:graph-connected-iff, lem:restrict-component}
+      Each component $C$ carries the subdivision $S|_C$
+      (\cref{lem:restrict-component}), whose graph is the part of the graph of
+      $S$ inside $C$, and is connected by \cref{thm:graph-connected-iff}. An
+      edge lies in one component together with its endpoints, so no edge joins
+      the graphs of different components. Hence $C \mapsto$ (graph of $S|_C$)
+      is a bijection onto the components of the graph.
+    \end{proof}

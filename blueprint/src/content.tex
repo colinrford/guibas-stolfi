@@ -1,0 +1,54 @@
+% Numbered chapters follow sections 1--11 of the paper.
+% The examples and orientation files are sections within chapter 1.
+
+\chapter*{Reading this blueprint}
+
+This blueprint is deliberately detailed: intermediate lemmas and proof sketches
+are retained as a learning aid. It follows the current Lean source rather than
+silently identifying the formalization with every convention in the paper.
+The separate \texttt{notes/formalization-ch1.pdf} gives a more extensive
+mathematical companion to the proofs.
+
+Numbered chapters follow the eleven sections of Guibas--Stolfi's paper.
+Chapter 1 contains the subdivision theory, its surface examples, and the
+orientability route toward the Figure 2 counterexample. The examples and
+orientability work are supporting subsections of section 1, not additional
+paper sections.
+
+Chapters 2--11 are roadmap placeholders with the paper's section titles.
+They provide locations to develop the rest of the blueprint without changing
+this numbering. Existing algebra and permutation-splice code is noted in the
+relevant chapters, but those chapters do not yet provide its full blueprint.
+
+\paragraph{Completed work.}
+Nothing, yet.
+
+\paragraph{Open work.}
+Within chapter 1, Klein bottle nonorientability and nonequivalence of the two
+subdivisions remain open. The proposed route needs excision, the plane local
+homology computation, and comparisons between oriented atlases, local homology,
+and the existing Klein bottle quotient. Future targets have no Lean declaration
+attached and are marked not ready in the web dependency graph. In particular, a
+proved negative determinant calculation is not treated as a proof of
+nonorientability.
+
+\paragraph{Status and assumptions.}
+Completed declarations and proofs are marked formalized in the web version.
+The graph records the displayed mathematical dependencies, not every low-level
+Lean dependency.
+The dependency graph currently describes the developed material and targets
+in chapter 1. The later roadmap chapters have no proof nodes yet, so the graph
+is not a completion chart for the entire paper.
+
+\input{chapter/subdivisions}
+\input{chapter/surface_examples}
+\input{chapter/orientability}
+\input{chapter/edge_functions}
+\input{chapter/edge_algebras}
+\input{chapter/quad_edge}
+\input{chapter/operators}
+\input{chapter/delaunay_operators}
+\input{chapter/voronoi_delaunay}
+\input{chapter/incircle}
+\input{chapter/divide_and_conquer}
+\input{chapter/incremental}

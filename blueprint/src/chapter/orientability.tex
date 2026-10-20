@@ -1,0 +1,257 @@
+\section{Figure 2: the orientability route}
+
+This section separates the completed smooth-atlas proof for the torus from the
+Klein bottle obstruction lemmas and the unfinished local homology route.
+The future targets have no Lean declaration attached and are explicitly marked
+not ready. Their dependency arrows describe the proposed proof route.
+
+\subsection{Smooth oriented atlases}
+
+\begin{definition}[Oriented atlas]\label{def:oriented-atlas}
+  %\lean{GuibasStolfi.OrientedAtlas, GuibasStolfi.HasOrientedAtlas}
+
+  An oriented atlas is a charted-space structure modeled on $\mathbb R^2$
+  whose transitions are smooth and have positive Jacobian determinant at
+  every point of every overlap. The charted-space axioms ensure that charts
+  cover the whole space. Write $\operatorname{OA}(M)$ for existence of such an atlas.
+\end{definition}
+
+\begin{lemma}[Transport of oriented atlases]\label{lem:orientation-invariant}
+  \uses{def:oriented-atlas, def:isomorphism-equivalent}
+  %\lean{GuibasStolfi.OrientedAtlas.isManifold,
+        GuibasStolfi.hasOrientedAtlas_iff_of_homeomorph,
+        GuibasStolfi.Subdivision.Equivalent.hasOrientedAtlas_iff}
+  
+  An oriented atlas supplies a Mathlib smooth manifold structure. Existence
+  of an oriented atlas is invariant under arbitrary homeomorphisms, and hence
+  under subdivision equivalence.
+\end{lemma}
+\begin{proof}
+
+  Smooth transitions give the manifold structure. For a homeomorphism $h$,
+  transport each chart $e$ to $e\circ h^{-1}$. The transition maps are unchanged,
+  since the two copies of $h$ cancel. Thus their smoothness and determinants
+  are unchanged. No differentiability of $h$ is required.
+\end{proof}
+
+\begin{lemma}[Torus interval-lift atlas]\label{lem:torus-lift-atlas}
+  \uses{def:torus-cells}
+  %\lean{GuibasStolfi.Torus.orientationChartedSpace,
+        GuibasStolfi.Torus.transition_locally_translation,
+        GuibasStolfi.Torus.transition_det_eq_one}
+
+  Lift the two circle coordinates into intervals $(a_i,a_i+1)$. These
+  charts cover every torus point. Every overlap transition is locally a
+  translation and has derivative the identity, with determinant $1$.
+\end{lemma}
+\begin{proof}
+
+  For a representative $r\in[0,1)^2$, choose the cut $a=r-(1/2,1/2)$,
+  which places $r$ inside its target rectangle. At a point $x$ of an overlap
+  set $c=e'(q_T(x))-x$. The quotient of $c$ is zero. Openness of the target
+  implies that $y+c$ lies there for all $y$ near $x$, and the inverse chart
+  relation gives $e'(q_T(y))=y+c$. Differentiate this local translation.
+\end{proof}
+
+\begin{proposition}[Torus orientability]\label{prop:torus-orientable}
+  \uses{lem:torus-lift-atlas, def:oriented-atlas}
+  %\lean{GuibasStolfi.Torus.orientable, GuibasStolfi.Torus.standardTorus_orientable}
+
+  The torus example admits an oriented atlas, as does Mathlib's unit
+  two-dimensional torus.
+\end{proposition}
+\begin{proof}
+  \uses{lem:orientation-invariant}
+
+  The interval-lift atlas has all transition determinants equal to $1$.
+  Transport it along the homeomorphism to Mathlib's torus.
+\end{proof}
+
+\subsection{Completed Klein bottle obstruction lemmas}
+
+\begin{lemma}[The lifted gluing reverses plane orientation]\label{lem:klein-twist}
+  \uses{def:klein-quotient}
+  %\lean{GuibasStolfi.KleinBottle.quotientMap_twist,
+        GuibasStolfi.KleinBottle.twist_det_eq_neg_one}
+
+  For $g(x,y)=(x+1,-y)$ one has $q_K\circ g=q_K$, and $\det Dg=-1$.
+\end{lemma}
+\begin{proof}
+
+  The quotient identifies a point with its $\tau$-image. Differentiating
+  the plane lift gives $\operatorname{diag}(1,-1)$.
+\end{proof}
+
+\begin{lemma}[Sign-change obstruction]\label{lem:klein-sign-obstruction}
+  \uses{def:klein-quotient}
+  %\lean{GuibasStolfi.KleinBottle.exists_zero_of_flip_antiinvariant,
+        GuibasStolfi.KleinBottle.no_nonzero_flip_antiinvariant}
+
+  Every continuous $f:C\to\mathbb R$ satisfying $f(\tau(p))=-f(p)$
+  vanishes somewhere. In particular, such a function cannot be everywhere nonzero.
+\end{lemma}
+\begin{proof}
+
+  The torus $C$ is connected. Values at $p$ and $\tau(p)$ have opposite signs,
+  so the intermediate value theorem gives a zero.
+\end{proof}
+
+\begin{lemma}[No continuous quotient section]\label{lem:klein-no-section}
+  \uses{def:klein-quotient}
+  %\lean{GuibasStolfi.KleinBottle.projection_no_continuous_section}
+
+  There is no continuous $s:K\to C$ satisfying $\pi\circ s=\mathrm{id}_K$.
+\end{lemma}
+\begin{proof}
+
+  If $s$ existed, the closed sets $\{p:s(\pi(p))=p\}$ and
+  $\{p:s(\pi(p))=\tau(p)\}$ would cover $C$. They are disjoint since
+  $\tau$ has no fixed points, and both are nonempty by evaluating at $s(z)$
+  and $\tau(s(z))$. This contradicts connectedness of $C$.
+\end{proof}
+These lemmas do not yet imply that every possible oriented atlas on $K$ is
+impossible. The missing implication is that any such atlas would supply a
+section of this particular quotient. A negative determinant in chosen
+coordinates alone does not establish that implication.
+
+\subsection{Coordinate-independent local homology}
+
+\begin{definition}[Relative singular integral homology]\label{def:relative-homology}
+  %\lean{GuibasStolfi.LocalOrientation.singularPairFunctor,
+        GuibasStolfi.LocalOrientation.relativeHomologyFunctor}
+
+  Apply the singular simplicial set functor to a topological pair $(M,A)$,
+  then take Mathlib's relative simplicial homology with coefficient object
+  $\mathbb Z$ in the category of abelian groups. Denote it $H_n(M,A;\mathbb Z)$.
+  The relative chain complex is the cokernel of the subspace's chain inclusion.
+\end{definition}
+
+\begin{definition}[Local orientations]\label{def:local-orientation}
+  \uses{def:relative-homology}
+  %\lean{GuibasStolfi.LocalOrientation.localHomology, GuibasStolfi.LocalOrientation.At}
+
+  Put $L_x(M)=H_2(M,M\setminus\{x\};\mathbb Z)$.
+  A local orientation at $x$ is an additive equivalence
+  $o_x:\mathbb Z\to L_x(M)$, specifying the generator $o_x(1)$.
+\end{definition}
+
+\begin{lemma}[Exactly two generators, conditionally]\label{lem:two-local-generators}
+  \uses{def:local-orientation}
+  %\lean{GuibasStolfi.OrientationGenerator.eq_or_eq_reverse,
+        GuibasStolfi.OrientationGenerator.signEquiv,
+        GuibasStolfi.OrientationGenerator.reverse_ne}
+
+  Given one additive equivalence $o:\mathbb Z\to G$, all such equivalences
+  are exactly $o$ and $n\mapsto o(-n)$, and these are distinct.
+\end{lemma}
+\begin{proof}
+
+  The comparison of two equivalences is an additive automorphism of
+  $\mathbb Z$, determined by its value at $1$. Its inverse shows this value
+  is a unit, hence $1$ or $-1$. Injectivity distinguishes the two signs.
+\end{proof}
+This does not prove that any given surface point has a local generator.
+The plane computation required for that conclusion is still open in this development.
+
+\begin{definition}[Coherent homological orientation]\label{def:coherent-orientation}
+  \uses{def:local-orientation}
+  %\lean{GuibasStolfi.LocalOrientation.toLocal,
+        GuibasStolfi.LocalOrientation.IsCoherent, GuibasStolfi.LocalOrientation.Coherent}
+
+  For $x\in U$, complement inclusion gives a map
+  $\rho_{U,x}:H_2(M,M\setminus U;\mathbb Z)\to L_x(M)$.
+  A field $(o_x)$ of local orientations is coherent if every point has an
+  open neighborhood $U$ and one class $c\in H_2(M,M\setminus U;\mathbb Z)$
+  with $\rho_{U,y}(c)=o_y(1)$ for all $y\in U$.
+\end{definition}
+
+\begin{lemma}[Homeomorphism invariance of coherence]\label{lem:homological-orientation-invariant}
+  \uses{def:coherent-orientation, def:isomorphism-equivalent}
+  %\lean{GuibasStolfi.LocalOrientation.relativeHomeomorph_natural,
+        GuibasStolfi.LocalOrientation.nonempty_coherent_iff,
+        GuibasStolfi.LocalOrientation.isCoherent_reverse,
+        GuibasStolfi.Subdivision.Equivalent.nonempty_coherent_iff}
+
+  Arbitrary homeomorphisms transport coherent homological orientations.
+  Existence is therefore invariant under subdivision equivalence. Reversing
+  every local orientation preserves coherence.
+\end{lemma}
+\begin{proof}
+
+  Transport the punctured pairs and representing neighborhood classes through
+  the homeomorphism. Naturality with complement inclusions preserves the
+  representing equations. For reversal negate the representing class.
+\end{proof}
+
+\subsection{Remaining targets for the orientation-cover proof}
+
+The following standard mathematical steps need substantial formal development.
+No excision axiom, local homology computation, or atlas-comparison axiom has
+been introduced. The two orientation criteria above are not yet linked in Lean.
+The current homology declarations use small Lean types (universe zero).
+
+\begin{lemma}[Local excision]\label{lem:local-excision}
+  \notready
+  \uses{def:relative-homology}
+  For a Hausdorff space $M$, an open neighborhood $U$ of $x$, and all $n$,
+  inclusion induces an isomorphism
+  $H_n(U,U\setminus\{x\};\mathbb Z)\cong H_n(M,M\setminus\{x\};\mathbb Z)$.
+\end{lemma}
+Excision for the relative singular homology construction was not found in
+the pinned Mathlib checkout. The stronger general excision theorem would
+give this neighborhood statement.
+
+\begin{lemma}[Plane local homology]\label{lem:plane-local-homology}
+  \notready
+  \uses{def:local-orientation}
+  The local group $L_x(\mathbb R^2)$ is infinite cyclic, with generators
+  compatible under restriction to sufficiently small disk neighborhoods.
+\end{lemma}
+
+\begin{proposition}[Orientation double cover]\label{prop:orientation-cover}
+  \notready
+  \uses{lem:local-excision, lem:plane-local-homology, lem:two-local-generators,
+        def:coherent-orientation}
+  For a Hausdorff surface, the local orientations assemble into a topological
+  double cover of the surface, and coherent fields give continuous sections.
+\end{proposition}
+
+\begin{lemma}[Local homology and Jacobian sign]\label{lem:jacobian-homology}
+  \notready
+  \uses{lem:plane-local-homology, lem:local-excision}
+  Relative to the standard plane orientation, a smooth local diffeomorphism
+  acts on local homology with the sign of its Jacobian determinant.
+  In particular a plane reflection acts by negation.
+\end{lemma}
+
+\begin{proposition}[Oriented atlases give sections]\label{prop:atlas-gives-section}
+  \notready
+  \uses{def:oriented-atlas, prop:orientation-cover, lem:jacobian-homology}
+  Every oriented atlas induces a coherent homological orientation and a
+  continuous section of the orientation double cover.
+\end{proposition}
+
+\begin{proposition}[The Klein bottle orientation cover]\label{prop:klein-orientation-cover}
+  \notready
+  \uses{prop:orientation-cover, lem:jacobian-homology, lem:klein-twist,
+        lem:klein-charts}
+  The orientation double cover of $K$ is isomorphic, over $K$, to
+  $\pi:C\to K$ from the Klein bottle construction.
+\end{proposition}
+
+\begin{proposition}[Klein bottle nonorientability]\label{prop:klein-nonorientable}
+  \notready
+  \uses{prop:atlas-gives-section, prop:klein-orientation-cover, lem:klein-no-section}
+  The Klein bottle $K$ admits no oriented atlas.
+\end{proposition}
+The planned contradiction uses the proved no-section lemma after the two
+preceding comparisons have been established.
+
+\begin{proposition}[Nonequivalent subdivisions]\label{prop:torus-klein-nonequivalent}
+  \notready
+  \uses{prop:torus-orientable, prop:klein-nonorientable, lem:orientation-invariant,
+        prop:torus-subdivision, prop:klein-subdivision}
+  The constructed torus and Klein bottle subdivisions are not equivalent.
+\end{proposition}
+Together with their proved graph isomorphism, this would complete
+Proposition~\ref{prop:graph-not-determining}. That final conclusion is still open.
