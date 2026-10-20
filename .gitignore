@@ -1,2 +1,37 @@
 # cache and other artifacts produced by Lean's Lake build tool
 .lake/
+
+# Lean outputs if generated beside source files
+*.olean
+*.ilean
+*.olean.private
+*.olean.server
+*.ir
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.synctex
+*.synctex.gz
+*.toc
+*.out
+*.lof
+*.lot
+*.xdv
+*.paux
+
+# Generated blueprint website and PDF build
+/blueprint/web/
+/blueprint/print/
+/blueprint/lean_decls
+
+# PDFs produced beside blueprint sources by the editor
+/blueprint/src/**/*.pdf
+
+# Assembled website
+/_site/
+
+# macos
+.DS_Store
