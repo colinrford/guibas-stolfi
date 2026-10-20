@@ -32,10 +32,12 @@ jobs:
           restore-keys: |
             docs-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'docbuild/lake-manifest.json') }}-
 
-      - name: Install Graphviz
+      - name: Install blueprint system tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y graphviz libgraphviz-dev
+          sudo apt-get install -y \
+            graphviz libgraphviz-dev \
+            texlive-latex-base ghostscript dvisvgm
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -89,4 +91,3 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v5
-
