@@ -1,0 +1,42 @@
+% In this file you should put all LaTeX macros and settings to be used both by
+% the pdf version and the web version.
+% This should be most of your macros.
+
+% The theorem-like environments defined below are those that appear by default
+% in the dependency graph. See the README of leanblueprint if you need help to
+% customize this.
+% The configuration below use the theorem counter for all those environments
+% (this is what the [theorem] arguments mean) and never resets it.
+% If you want for instance to number them within chapters then you can add
+% [chapter] at the end of the next line.
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+% Edge functions (Guibas–Stolfi). The paper writes these postfix and in italics:
+% e \Rot\,\Onext means "first Rot, then Onext".
+\newcommand{\Onext}{\mathit{Onext}}
+\newcommand{\Oprev}{\mathit{Oprev}}
+\newcommand{\Rot}{\mathit{Rot}}
+\newcommand{\Flip}{\mathit{Flip}}
+\newcommand{\Sym}{\mathit{Sym}}
+\newcommand{\Dual}{\mathit{Dual}}
+\newcommand{\Lnext}{\mathit{Lnext}}
+\newcommand{\Rnext}{\mathit{Rnext}}
+\newcommand{\Dnext}{\mathit{Dnext}}
+\newcommand{\Lprev}{\mathit{Lprev}}
+\newcommand{\Rprev}{\mathit{Rprev}}
+\newcommand{\Dprev}{\mathit{Dprev}}
+\newcommand{\Org}{\mathit{Org}}
+\newcommand{\Dest}{\mathit{Dest}}
+\newcommand{\Left}{\mathit{Left}}
+\newcommand{\Right}{\mathit{Right}}
+
+% Elements of a subdivision S (Def 1.1): vertices, edges, faces.
+\newcommand{\VS}{\mathscr{V}\mathscr{S}}
+\newcommand{\ES}{\mathscr{E}\mathscr{S}}
+\newcommand{\FS}{\mathscr{F}\mathscr{S}}

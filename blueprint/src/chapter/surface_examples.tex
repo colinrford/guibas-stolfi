@@ -1,0 +1,223 @@
+\section{Surface examples supporting section 1}
+
+These examples verify the complete subdivision definition, including all
+characteristic-map conditions. The ambient surfaces are Hausdorff. This is
+supporting work for the paper's Figure~2, not a replacement for the general
+theory. Lean names are in the \texttt{GuibasStolfi} namespace.
+
+\subsection{Shared square geometry}
+
+\begin{lemma}[Disk--square parametrization]\label{lem:disk-square}
+  %\lean{GuibasStolfi.Square.parametrization_exists, GuibasStolfi.Square.image_circle}
+
+  There is a homeomorphism $d:\mathbb C\to\mathbb R^2$ taking the open unit
+  disk onto $(0,1)^2$, the closed unit disk onto $[0,1]^2$, and the unit circle
+  onto the square boundary.
+\end{lemma}
+\begin{proof}
+
+  Apply Mathlib's convex gauge-rescaling homeomorphism theorem to the compact
+  convex square with nonempty interior, then invert the resulting map.
+  The boundary equality follows by taking the difference of the two disk images.
+\end{proof}
+
+\begin{definition}[Square boundary path]\label{def:square-path}
+  \uses{lem:disk-square, def:simple-path}
+  %\lean{GuibasStolfi.Square.path, GuibasStolfi.Square.diskToSquare_on_elem}
+
+  Pull the four corners and four open sides, in cyclic order, back through
+  $d|_{S^1}$. They form an eight-piece simple path. The restriction of $d$ to
+  each piece maps homeomorphically onto its corner or whole open side.
+\end{definition}
+The chosen $d$ is noncomputable and is not assigned an orientation. The torus
+orientation proof uses separate quotient charts.
+
+\subsection{A sphere with one equatorial loop}
+
+\begin{definition}[Sphere model and cells]\label{def:loop-sphere}
+  \uses{def:point-line-disk}
+  %\lean{GuibasStolfi.LoopSphere.sphereHomeomorph, GuibasStolfi.LoopSphere.vertex,
+        GuibasStolfi.LoopSphere.edge, GuibasStolfi.LoopSphere.north,
+        GuibasStolfi.LoopSphere.south}
+
+  Use the one-point compactification $\mathbb C\cup\{\infty\}$, identified
+  with the unit sphere in $\mathbb R^3$. Choose $p\in S^1$. The cells are
+  $\{p\}$, $S^1\setminus\{p\}$, the open unit disk, and
+  $\{z:|z|>1\}\cup\{\infty\}$.
+\end{definition}
+
+\begin{proposition}[Sphere subdivision]\label{prop:loop-sphere-subdivision}
+  \uses{def:loop-sphere, def:subdivision, def:simple-path}
+  %\lean{GuibasStolfi.LoopSphere.subdivision, GuibasStolfi.LoopSphere.vertices_count,
+        GuibasStolfi.LoopSphere.edges_count, GuibasStolfi.LoopSphere.faces_count}
+
+  These cells form a subdivision with one vertex, one loop edge, and two faces.
+\end{proposition}
+\begin{proof}
+  \uses{def:endpoints, lem:endpoints-card}
+
+  Extend $z\mapsto1/\overline z$ by exchanging $0$ and $\infty$.
+  This involutive homeomorphism fixes $S^1$ pointwise. Use the disk inclusion
+  as the first face map and its composite with inversion as the second.
+  The one-point, one-arc circle partition works for both faces. Local plane
+  charts, with an inverted chart at infinity, prove the manifold condition.
+  Partition, shapes, and S4 follow from these maps. The endpoint theorem makes
+  the unique vertex the loop's unique endpoint.
+\end{proof}
+
+\begin{corollary}\label{cor:loop-sphere-connected}
+  \uses{prop:loop-sphere-subdivision, thm:graph-connected-iff}
+  %\lean{GuibasStolfi.LoopSphere.graph_connected, GuibasStolfi.LoopSphere.connected}
+
+  The sphere example has connected graph and connected ambient space.
+\end{corollary}
+\begin{proof}
+
+  Its graph has one vertex. Apply the general connectivity theorem and
+  nonemptiness of the sphere.
+\end{proof}
+This topological construction is separate from the finite algebra
+\texttt{EdgeAlgebra.sphere}; their geometric relationship is not formalized.
+
+\subsection{The one-face torus}
+
+\begin{definition}[Torus model and cells]\label{def:torus-cells}
+  %\lean{GuibasStolfi.Torus.standardTorus, GuibasStolfi.Torus.vertex,
+        GuibasStolfi.Torus.horizontal, GuibasStolfi.Torus.vertical, GuibasStolfi.Torus.face}
+
+  Let $T=(\mathbb R/\mathbb Z)^2$, homeomorphic to Mathlib's
+  two-dimensional unit torus. Its vertex is $(0,0)$, its two open edges
+  are the punctured coordinate circles, and its face is their complement.
+  Write $q_T(x,y)=([x],[y])$.
+\end{definition}
+
+\begin{proposition}[Torus subdivision]\label{prop:torus-subdivision}
+  \uses{def:torus-cells, def:square-path, def:subdivision}
+  %\lean{GuibasStolfi.Torus.subdivision, GuibasStolfi.Torus.vertices_count,
+        GuibasStolfi.Torus.edges_count, GuibasStolfi.Torus.faces_count,
+        GuibasStolfi.Torus.edges_are_loops}
+
+  The torus cells form a subdivision with one vertex, two loop edges, and one face.
+\end{proposition}
+\begin{proof}
+  \uses{lem:endpoints-card}
+
+  Reduction modulo one gives a homeomorphism from $(0,1)$ onto the punctured
+  circle. Its product maps the open square homeomorphically onto the face.
+  Translating that open disk gives a disk neighborhood at every torus point.
+  The characteristic map $q_T\circ d$ maps the closed disk onto the whole
+  torus, which is the face closure. Opposite open sides map homeomorphically
+  onto the same whole edge, and all corners map to the vertex. Use the
+  square boundary path for S4. Partition uniqueness and the general endpoint
+  theorem give the loop statements and counts.
+\end{proof}
+
+\subsection{The Klein bottle quotient}
+
+\begin{definition}[Klein bottle model]\label{def:klein-quotient}
+  %\lean{GuibasStolfi.KleinBottle.flip, GuibasStolfi.KleinBottle.relation,
+        GuibasStolfi.KleinBottle.projection_eq_iff, GuibasStolfi.KleinBottle.flip_ne}
+
+  Put $C=(\mathbb R/2\mathbb Z)\times(\mathbb R/\mathbb Z)$ and
+  $\tau(u,v)=(u+[1],-v)$. This is a fixed-point-free involutive homeomorphism.
+  Define $K=C/{\sim}$, where $a\sim b$ iff $b=a$ or $b=\tau(a)$.
+  For the quotient $\pi:C\to K$, equality $\pi(a)=\pi(b)$ is exactly this relation.
+\end{definition}
+
+\begin{lemma}[Square gluing and local charts]\label{lem:klein-charts}
+  \uses{def:klein-quotient}
+  %\lean{GuibasStolfi.KleinBottle.horizontal_gluing, GuibasStolfi.KleinBottle.vertical_gluing,
+        GuibasStolfi.KleinBottle.rectangle_embedding, GuibasStolfi.KleinBottle.canonical_surjective,
+        GuibasStolfi.KleinBottle.isTwoManifold}
+
+  The map $q_K(x,y)=\pi([x]_2,[y]_1)$ satisfies
+  \[
+    q_K(x,1)=q_K(x,0),\qquad q_K(1,y)=q_K(0,-y).
+  \]
+  It is an open embedding on every open rectangle
+  $(a,a+1)\times(b,b+1)$. The half-open square $[0,1)^2$ represents all points.
+  The quotient is Hausdorff and has disk neighborhoods at every point.
+\end{lemma}
+\begin{proof}
+
+  Saturation of an open set under the relation is its union with its
+  $\tau$-image, so the projection is open. The relation is closed, giving the
+  Hausdorff quotient. Equality of plane images forces equality of first
+  coordinates modulo one; in a half-open interval of length one these real
+  coordinates agree. The $\tau$ alternative is then impossible since
+  $[1]_2\ne0$, and the second coordinates agree as well. This proves rectangle
+  injectivity; openness and continuity supply the embeddings. Reducing a point
+  of $C$ into $[0,2)\times[0,1)$ and applying $\tau$ when necessary gives
+  the half-open unit-square representatives. Center an embedded rectangle
+  at a representative to obtain its disk neighborhood.
+\end{proof}
+
+\begin{proposition}[Klein bottle subdivision]\label{prop:klein-subdivision}
+  \uses{lem:klein-charts, def:square-path, def:subdivision}
+  %\lean{GuibasStolfi.KleinBottle.subdivision, GuibasStolfi.KleinBottle.vertices_count,
+        GuibasStolfi.KleinBottle.edges_count, GuibasStolfi.KleinBottle.faces_count,
+        GuibasStolfi.KleinBottle.edges_are_loops}
+
+  The $q_K$-images of $\{(0,0)\}$, $(0,1)\times\{0\}$,
+  $\{0\}\times(0,1)$, and $(0,1)^2$ form a subdivision with one vertex,
+  two loop edges, and one disk face.
+\end{proposition}
+\begin{proof}
+  \uses{lem:endpoints-card}
+
+  Half-open representatives give the partition. The local charts give
+  the edge and face shapes. The characteristic map is $q_K\circ d$.
+  The open square maps homeomorphically to the dense face, while its closed
+  square maps onto $K$. Top and bottom sides agree; the right side maps to
+  the whole left edge by $y\mapsto1-y$, using period one. All corners agree.
+  These facts establish S4. The general endpoint theorem gives both loops.
+\end{proof}
+
+\begin{proposition}[Isomorphic underlying graphs]\label{prop:torus-klein-graph}
+  \uses{prop:torus-subdivision, prop:klein-subdivision, def:graph-iso}
+  %\lean{GuibasStolfi.KleinBottle.torusGraphIso}
+
+  The torus and Klein bottle examples have isomorphic graphs.
+\end{proposition}
+\begin{proof}
+
+  Match their unique vertices, horizontal edges, and vertical edges. Both
+  edges in each graph are loops at that vertex, so all link relations agree.
+\end{proof}
+
+\subsection{Clara L\"oh's finite triangulation}
+
+\begin{definition}[Credited combinatorial reference]\label{def:klein-triangulation}
+  %\lean{GuibasStolfi.KleinBottleTriangulation.triangles,
+        GuibasStolfi.KleinBottleTriangulation.simplices}
+
+  Take the 18 Klein bottle triangles from Clara L\"oh's Lean 3 project
+  \emph{Exploring Formalisation}, and their finite downward closure on
+  $\{0,\ldots,8\}$, including the empty face.
+\end{definition}
+The exact source file and pinned revision are:
+\begin{quote}\small
+\texttt{src/gen\_simplicial\_complex.lean}\\
+\texttt{a9ebece93862cc166fcf62d5c6ae0964ab571deb}
+\end{quote}
+The adaptation, original copyright, and Apache 2.0 license are recorded in
+\texttt{ACKNOWLEDGMENTS.md} and \texttt{third\_party/exploring-formalisation/}.
+The quotient construction above is separate; no realization homeomorphism
+has been proved.
+
+\begin{lemma}[Finite counts and incidence]\label{lem:klein-triangulation-counts}
+  \uses{def:klein-triangulation}
+  %\lean{GuibasStolfi.KleinBottleTriangulation.subset_closed,
+        GuibasStolfi.KleinBottleTriangulation.vertices_count,
+        GuibasStolfi.KleinBottleTriangulation.edges_count,
+        GuibasStolfi.KleinBottleTriangulation.triangles_count,
+        GuibasStolfi.KleinBottleTriangulation.every_edge_has_two_triangles}
+
+  The simplex set is downward closed, with 9 vertices, 27 edges, and 18
+  triangles. Each edge belongs to exactly two listed triangles.
+\end{lemma}
+\begin{proof}
+
+  Downward closure follows from the powerset construction. The finite counts
+  and edge-incidence statements are verified by kernel-checked decisions.
+\end{proof}
