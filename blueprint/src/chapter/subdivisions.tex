@@ -11,8 +11,8 @@ result below needs that hypothesis, it is stated explicitly.
 
     % % % definition of separable, incident
     \begin{definition}[Separable, incident]\label{def:separable}
-      %\lean{GuibasStolfi.Separable, GuibasStolfi.Incident}
-
+      \lean{GuibasStolfi.Separable, GuibasStolfi.Incident}
+      \leanok
       Subsets $A$, $B$, of a topological space $M$ are \emph{separable} if some
       neighborhood of $A$ is disjoint from some neighborhood of $B$; otherwise
       they are \emph{incident}.
@@ -44,21 +44,42 @@ result below needs that hypothesis, it is stated explicitly.
 
     % % % definitions of points, lines, disks
     \begin{definition}[Point, line, disk]\label{def:point-line-disk}
-      %\lean{GuibasStolfi.IsPoint, GuibasStolfi.IsLine, GuibasStolfi.IsDisk}
-
+      \lean{GuibasStolfi.IsPoint, GuibasStolfi.IsLine, GuibasStolfi.IsDisk}
+      \leanok
       A \emph{point} of $M$ is a one-element subset $\{ p \}$.
       A \emph{line} of $M$ is a subspace homeomorphic to $B_1 = (0, 1)$.
       A \emph{disk} of $M$ is a subspace homeomorphic to $B_2 = \{ x \in
       \mathbb{R}^2 : |x| < 1 \}$.
     \end{definition}
 
+    % % % lemma distinguishing poitns, lines, disk
+    \begin{lemma}\label{lem:shapes-not-homeomorphic}
+      \uses{def:point-line-disk}
+      \lean{GuibasStolfi.shapes_not_homeomorphic}
+      \leanok
+      No point is homeomorphic to a line or a disk, and no line is homeomorphic
+      to a disk.
+    \end{lemma}
+    \begin{proof}
+      A singleton $\{ p \}$ cannot be homeomorphic to a line or a disk, since
+      each contains multiple distinct points.
+
+      If a line and a disk were homeomorphic, then the open unit interval
+      $(0, 1)$ and the plane would be homeomorphic. The removal of a point (say
+      $\frac{1}{2}$) from the interval leaves the interval disconnected.
+      Removing the image of the removed point in the plane under the
+      homeomorphism (say $\varphi \left( \frac{1}{2} \right)$) leaves the plane
+      connected. Such a homeomorphism cannot exist (since homeomorphisms
+      preserve connectedness).
+    \end{proof}
+
     % % % definition of 2 manifold
     \begin{definition}[2-manifold]\label{def:manifold}
       \uses{def:point-line-disk}
-      %\lean{GuibasStolfi.IsTwoManifold}
-
-      A topological space in which every point has an open neighborhood which
-      is a disk.
+      \lean{GuibasStolfi.IsTwoManifold}
+      \leanok
+      A \emph{2-manifold} is a topological space in which every point has an
+      open neighborhood homeomorphic to a disk.
     \end{definition}
 
     % % % lemma relating our 2 manifold to mathlib4's charted space
