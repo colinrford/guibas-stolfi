@@ -1,7 +1,7 @@
 -- import GuibasStolfi.Basic
 -- import GuibasStolfi.Sphere
 import GuibasStolfi.Subdivision.Prelim
--- import GuibasStolfi.Subdivision.Basic
+import GuibasStolfi.Subdivision.Basic
 -- import GuibasStolfi.Subdivision.Equivalence
 -- import GuibasStolfi.Subdivision.Examples.LoopSphere
 -- import GuibasStolfi.Subdivision.Examples.Torus
