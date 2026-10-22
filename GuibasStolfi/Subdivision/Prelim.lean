@@ -1,6 +1,11 @@
 module
 
-public import Mathlib
+public import Mathlib.Analysis.Complex.Basic
+public import Mathlib.Analysis.Normed.Module.Ball.Homeomorph
+public import Mathlib.Analysis.Normed.Module.Connected
+public import Mathlib.LinearAlgebra.Complex.FiniteDimensional
+public import Mathlib.Tactic.NormNum
+public import Mathlib.Tactic.Use
 
 @[expose] public section
 
