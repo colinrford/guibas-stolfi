@@ -1,6 +1,6 @@
 -- import GuibasStolfi.Basic
 -- import GuibasStolfi.Sphere
--- import GuibasStolfi.Subdivision.Prelim
+import GuibasStolfi.Subdivision.Prelim
 -- import GuibasStolfi.Subdivision.Basic
 -- import GuibasStolfi.Subdivision.Equivalence
 -- import GuibasStolfi.Subdivision.Examples.LoopSphere
