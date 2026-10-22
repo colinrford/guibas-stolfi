@@ -10,7 +10,10 @@ namespace GuibasStolfi
 
 variable {M : Type*} [TopologicalSpace M]
 
-/-- Separable subsets: Two disjoint sets have disjoint nbhds -/
+/-! ## Separation and Incidence -/
+section Separation
+
+/-- Separable subsets: Two sets are separable if they have disjoint nbhds -/
 def Separable (A B : Set M) : Prop :=
   ∃ U ∈ 𝓝ˢ A, ∃ V ∈ 𝓝ˢ B, Disjoint U V
 
@@ -33,6 +36,11 @@ lemma Incident.symm {A B : Set M}
   intro hBA
   exact h hBA.symm
 
+end Separation
+
+/-! ## Shapes: points, lines, disks -/
+section Shapes
+
 /-- Point -/
 def IsPoint (s : Set M) : Prop :=
   ∃ p, s = {p}
@@ -43,7 +51,7 @@ def IsLine (s : Set M) : Prop :=
 
 abbrev Plane := ℂ
 
-/-- Disk is open ball -/
+/-- Disk is (subset homeomorphic to) open unit ball -/
 def IsDisk (s : Set M) : Prop :=
   Nonempty (s ≃ₜ Metric.ball (0 : Plane) 1)
 
@@ -139,5 +147,16 @@ lemma shapes_not_homeomorphic :
     obtain ⟨_, ⟨x, hx, rfl⟩, hvalue⟩ := hhalf
     exact hx (g.injective (Subtype.ext (by
       simpa [q] using hvalue)))
+
+end Shapes
+
+/-! ## Two-dim manifolds -/
+section Manifolds
+
+/-- def of 2-manifold. -/
+def IsTwoManifold (M : Type*) [TopologicalSpace M] : Prop :=
+  ∀ x : M, ∃ U : Set M, x ∈ U ∧ IsOpen U ∧ IsDisk U
+
+end Manifolds
 
 end GuibasStolfi
