@@ -269,7 +269,62 @@ lemma alternate (i : Fin (π.m + 1))
     (hi : IsOpen (π.elem i) ∧ IsLine (π.elem i)) :
     closure (π.elem i) =
       π.elem (i - 1) ∪ π.elem i ∪ π.elem (i + 1) := by
-  sorry
+  apply Set.Subset.antisymm
+  · intro x hx
+    obtain ⟨j, hxj⟩ := π.exists_mem_elem x
+    by_cases hji : j = i
+    · exact Or.inl (Or.inr (hji ▸ hxj))
+    · have hxi : x ∉ π.elem i :=
+        (π.disjoint_elem hji).notMem_of_mem_left hxj
+      obtain ⟨p, hp⟩ : ∃ p, π.elem j = {p} := by
+        refine (π.isPoint_or_arc j).resolve_right ?_
+        intro hj
+        obtain ⟨y, hyj, hyi⟩ :=
+          mem_closure_iff.mp hx _ hj.1 hxj
+        exact (π.disjoint_elem hji).notMem_of_mem_left hyj hyi
+      obtain rfl : x = p := by
+        simpa [hp] using hxj
+      have hm : π.m ≠ 0 := by
+        intro hm
+        apply hji
+        apply Fin.ext
+        have := j.2
+        have := i.2
+        omega
+      have hprev : i - 1 ≠ i := by
+        simpa [sub_eq_self] using hm
+      have hnext : i + 1 ≠ i := by
+        simpa using hm
+      obtain ⟨a, ha, hac⟩ :=
+        π.exists_eq_singleton_mem_closure hi.1 hprev
+          (by simpa using (π.adjacent (i - 1)).isPreconnected)
+      obtain ⟨b, hb, hbc⟩ :=
+        π.exists_eq_singleton_mem_closure hi.1 hnext
+          (by simpa [Set.union_comm] using
+            (π.adjacent i).isPreconnected)
+      obtain ⟨u, v, huv⟩ :=
+        closure_subset_of_isPreconnected (π.isPreconnected_elem i hi.2)
+      have hxuv := (huv hx).resolve_left hxi
+      have hauv := (huv hac).resolve_left
+        ((π.disjoint_elem hprev).notMem_of_mem_left
+          (ha ▸ Set.mem_singleton a))
+      have hbuv := (huv hbc).resolve_left
+        ((π.disjoint_elem hnext).notMem_of_mem_left
+          (hb ▸ Set.mem_singleton b))
+      by_cases hxa : x = a
+      · exact Or.inl (Or.inl (ha ▸ hxa))
+      by_cases hxb : x = b
+      · exact Or.inr (hb ▸ hxb)
+      have hab : a = b := by
+        simp only [Set.mem_insert_iff, Set.mem_singleton_iff]
+          at hxuv hauv hbuv
+        grind
+      refine (Fin.false_of_sub_one_eq_add_one
+        (π.injective (ha.trans (hab ▸ hb.symm))) hji
+        (fun h => hxa ?_)).elim
+      rw [h, ha] at hp
+      exact (Set.singleton_eq_singleton_iff.mp hp).symm
+  · exact π.neighbors_subset_closure i hi
 
 end SimplePath
 
