@@ -61,6 +61,7 @@ result below needs that hypothesis, it is stated explicitly.
       to a disk.
     \end{lemma}
     \begin{proof}
+      \leanok
       A singleton $\{ p \}$ cannot be homeomorphic to a line or a disk, since
       each contains multiple distinct points.
 
@@ -108,16 +109,25 @@ result below needs that hypothesis, it is stated explicitly.
   % % % section on subdivisions
   \section{Subdivisions}
 
+    % % % boundary circle aka S^1 % % %
+    \begin{definition}[Boundary circle]\label{def:unit-circle}
+      \lean{GuibasStolfi.UnitCircle}
+      \leanok
+      The unit circle is $S^1 = \{ z \in \mathbb{C} : | z | = 1 \}$ equipped
+      with the subspace topology.
+    \end{definition}
+
     % % % definition of simple path
     \begin{definition}[Simple path in $S^1$]\label{def:simple-path}
-      \uses{def:partition}
-      %\lean{GuibasStolfi.SimplePath}
-
+      \uses{def:partition, def:unit-circle}
+      \lean{GuibasStolfi.SimplePath}
+      \leanok
       A \emph{simple path} in $S^1$ consists of distinct subsets
       $P_0,\ldots,P_m$, indexed cyclically modulo $m+1$, which partition $S^1$.
       Each $P_i$ is a singleton or an open subset of $S^1$ homeomorphic to
       $(0,1)$, and $P_i\cup P_{i+1}$ is connected for every $i$.
     \end{definition}
+
     Cyclic adjacency is explicit data in Lean. The word ``isolated'' refers
     to the point pieces of this partition, not to isolated points of the
     circle as a topological space. The one-point, one-arc partition is allowed.
@@ -125,8 +135,8 @@ result below needs that hypothesis, it is stated explicitly.
     % % % definition 1.1, subdivision of a manifold
     \begin{definition}[Subdivision]\label{def:subdivision}
       \uses{def:manifold, def:point-line-disk, def:partition, def:simple-path}
-      %\lean{GuibasStolfi.Subdivision}
-
+      \lean{GuibasStolfi.Subdivision, GuibasStolfi.Subdivision.elements}
+      \leanok
       A \emph{subdivision} of a 2-manifold $M$ is a partition $S$ of $M$ into
       three finite sets of disjoint parts, the \emph{vertices} $\mathscr{V}
       \mathscr{S}$, the \emph{edges} $\mathscr{E} \mathscr{S}$, and
@@ -163,6 +173,7 @@ result below needs that hypothesis, it is stated explicitly.
       The vertices, edges, and faces of a subdivision are called its
       \emph{elements}.
     \end{definition}
+
     In Lean the map is defined on all of $\mathbb C$, with continuity required
     only on the closed disk; its values outside that disk are irrelevant.
     S4(ii) uses \emph{onto} an entire edge. This makes explicit the reading
@@ -170,26 +181,26 @@ result below needs that hypothesis, it is stated explicitly.
     Equivalence of these two formulations has not been proved here.
 
     % % % consequences of S4, paper pp. 77--78
-      \begin{lemma}\label{lem:simple-path-alternate}
-        \uses{def:simple-path}
-        %\lean{GuibasStolfi.SimplePath.alternate}
+    \begin{lemma}\label{lem:simple-path-alternate}
+      \uses{def:simple-path}
+      %\lean{GuibasStolfi.SimplePath.alternate}
 
-        If $P_i$ is an arc of a simple path, then
-        $\overline{P_i}=P_{i-1}\cup P_i\cup P_{i+1}$.
-      \end{lemma}
-      \begin{proof}
+      If $P_i$ is an arc of a simple path, then
+      $\overline{P_i}=P_{i-1}\cup P_i\cup P_{i+1}$.
+    \end{lemma}
+    \begin{proof}
 
-        Connectedness of consecutive unions forces each neighboring piece to
-        be a singleton in the arc's closure: two disjoint nonempty open arcs
-        would disconnect their union. A preconnected subset of the circle
-        adds at most two points under closure, as can be seen by cutting the
-        circle outside that subset and lifting it to an interval. Any further
-        point of $\overline{P_i}$ would force the two neighboring singleton
-        pieces to coincide. Injectivity of the indexed partition then reduces
-        to the two-piece case, where no further piece exists. Thus these are
-        exactly the neighbors added by closure. For one point and one arc,
-        the two neighbors of the arc are the same singleton.
-      \end{proof}
+      Connectedness of consecutive unions forces each neighboring piece to
+      be a singleton in the arc's closure: two disjoint nonempty open arcs
+      would disconnect their union. A preconnected subset of the circle
+      adds at most two points under closure, as can be seen by cutting the
+      circle outside that subset and lifting it to an interval. Any further
+      point of $\overline{P_i}$ would force the two neighboring singleton
+      pieces to coincide. Injectivity of the indexed partition then reduces
+      to the two-piece case, where no further piece exists. Thus these are
+      exactly the neighbors added by closure. For one point and one arc,
+      the two neighbors of the arc are the same singleton.
+    \end{proof}
 
       \begin{lemma}\label{lem:arc-image}
         \uses{def:subdivision, lem:simple-path-alternate, def:separable}

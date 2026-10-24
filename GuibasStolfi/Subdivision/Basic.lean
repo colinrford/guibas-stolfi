@@ -78,6 +78,6 @@ variable {M : Type*} [TopologicalSpace M]
 def elements (S : Subdivision M) : Set (Set M) :=
   S.vertices ∪ S.edges ∪ S.faces
 
-end subdivision
+end Subdivision
 
 end GuibasStolfi
