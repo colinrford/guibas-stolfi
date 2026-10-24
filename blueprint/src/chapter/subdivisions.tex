@@ -202,79 +202,82 @@ result below needs that hypothesis, it is stated explicitly.
       the two neighbors of the arc are the same singleton.
     \end{proof}
 
-      \begin{lemma}\label{lem:arc-image}
-        \uses{def:subdivision, lem:simple-path-alternate, def:separable}
-        %\lean{GuibasStolfi.Subdivision.image_arc}
+    % % %
+    \begin{lemma}\label{lem:arc-image}
+      \uses{def:subdivision, lem:simple-path-alternate, def:separable}
+      %\lean{GuibasStolfi.Subdivision.image_arc}
 
-        If $\alpha$ is the arc between two consecutive points $a$ and $b$ of
-        $\pi$, then its image $\phi_F(\alpha)$ is an edge incident to the
-        points $\phi_F(a)$ and $\phi_F(b)$.
-      \end{lemma}
-      \begin{proof}
+      If $\alpha$ is the arc between two consecutive points $a$ and $b$ of
+      $\pi$, then its image $\phi_F(\alpha)$ is an edge incident to the
+      points $\phi_F(a)$ and $\phi_F(b)$.
+    \end{lemma}
+    \begin{proof}
 
-        \uses{lem:incident-of-closure}
-        By (ii) and (iii), $\phi_F(\alpha)$ is an edge and $\phi_F(a)$,
-        $\phi_F(b)$ are vertices. Since $a \in \overline{\alpha}$ and $\phi_F$
-        is continuous, $\phi_F(a) \in \overline{\phi_F(\alpha)}$; apply
-        \cref{lem:incident-of-closure}.
-      \end{proof}
+      \uses{lem:incident-of-closure}
+      By (ii) and (iii), $\phi_F(\alpha)$ is an edge and $\phi_F(a)$,
+      $\phi_F(b)$ are vertices. Since $a \in \overline{\alpha}$ and $\phi_F$
+      is continuous, $\phi_F(a) \in \overline{\phi_F(\alpha)}$; apply
+      \cref{lem:incident-of-closure}.
+    \end{proof}
 
-      \begin{definition}[Bounding path]\label{def:bounding-path}
-        \uses{def:subdivision, lem:simple-path-alternate}
-        %\lean{GuibasStolfi.Subdivision.boundingPath}
+    % % %
+    \begin{definition}[Bounding path]\label{def:bounding-path}
+      \uses{def:subdivision, lem:simple-path-alternate}
+      %\lean{GuibasStolfi.Subdivision.boundingPath}
 
-        The images of the elements of $\pi$, taken in the order in which they
-        occur around $S^1$, form the \emph{bounding path} $\pi_F$ of $F$.
-      \end{definition}
+      The images of the elements of $\pi$, taken in the order in which they
+      occur around $S^1$, form the \emph{bounding path} $\pi_F$ of $F$.
+    \end{definition}
 
-      \begin{lemma}\label{lem:face-boundary}
-        \uses{def:bounding-path}
-        %\lean{GuibasStolfi.Subdivision.frontier_face,
-        %      GuibasStolfi.Subdivision.isConnected_frontier_face}
+    % % %
+    \begin{lemma}\label{lem:face-boundary}
+      \uses{def:bounding-path}
+      %\lean{GuibasStolfi.Subdivision.frontier_face,
+      %      GuibasStolfi.Subdivision.isConnected_frontier_face}
 
-        $\pi_F$ is a closed, connected path of edges and vertices of $S$, whose
-        union is the boundary $\overline{F} \setminus F$ of $F$.
-      \end{lemma}
-      \begin{proof}
+      $\pi_F$ is a closed, connected path of edges and vertices of $S$, whose
+      union is the boundary $\overline{F} \setminus F$ of $F$.
+    \end{lemma}
+    \begin{proof}
 
-        \uses{lem:arc-image}
-        $\phi_F$ maps $\overline{B_2}$ onto $\overline{F}$ and $B_2$ onto $F$.
-        The elements of $\pi$ map to vertices and edges, which are disjoint
-        from $F$ since $S$ is a partition; so
-        $\phi_F(S^1) = \overline{F} \setminus F$. It is connected as the
-        continuous image of $S^1$ (Mathlib: \texttt{isConnected\_sphere},
-        \texttt{IsConnected.image}).
-      \end{proof}
+      \uses{lem:arc-image}
+      $\phi_F$ maps $\overline{B_2}$ onto $\overline{F}$ and $B_2$ onto $F$.
+      The elements of $\pi$ map to vertices and edges, which are disjoint
+      from $F$ since $S$ is a partition; so
+      $\phi_F(S^1) = \overline{F} \setminus F$. It is connected as the
+      continuous image of $S^1$ (Mathlib: \texttt{isConnected\_sphere},
+      \texttt{IsConnected.image}).
+    \end{proof}
 
-      % Paper: pi_F need not be simple, since phi_F may take two or more
-      % distinct arcs or points of
-      % pi to the same element of S; so the closure of a face may not be a disk
-      % (Fig. 1).
-      Notice that the bounding path $\pi_F$ need not be simple, since $\phi_F$
-      may take two or more distinct arcs or points of $\pi$ to the same element
-      of $S$. Therefore the closure of a face may not be homeomorphic to a
-      disk, as Figure~1 of the paper shows.
+    % Paper: pi_F need not be simple, since phi_F may take two or more
+    % distinct arcs or points of
+    % pi to the same element of S; so the closure of a face may not be a disk
+    % (Fig. 1).
+    Notice that the bounding path $\pi_F$ need not be simple, since $\phi_F$
+    may take two or more distinct arcs or points of $\pi$ to the same element
+    of $S$. Therefore the closure of a face may not be homeomorphic to a
+    disk, as Figure~1 of the paper shows.
 
-      \begin{lemma}\label{lem:no-finite-cover}
-        \uses{def:point-line-disk, def:manifold}
-        %\lean{GuibasStolfi.not_disk_subset_finite_union}
+    \begin{lemma}\label{lem:no-finite-cover}
+      \uses{def:point-line-disk, def:manifold}
+      %\lean{GuibasStolfi.not_disk_subset_finite_union}
 
-        In a Hausdorff topological space, a disk is not contained in a finite
-        union of points and lines.
-      \end{lemma}
-      \begin{proof}
+      In a Hausdorff topological space, a disk is not contained in a finite
+      union of points and lines.
+    \end{lemma}
+    \begin{proof}
 
-        Write each line as a countable union of compact interval images.
-        Compact subsets are closed in the Hausdorff ambient space. Pull this
-        countable cover back along a homeomorphism from the plane onto the
-        disk. Baire's theorem on the plane gives a compact piece whose
-        preimage contains a nonempty open ball. This produces a continuous
-        injection of the plane into a point or into $(0,1)$. The former is
-        impossible by cardinality. For the latter, removing a point of the
-        plane leaves it connected, whereas an intermediate value between
-        two image points cannot be omitted. This contradicts injectivity.
-        No Baire assumption on the ambient space is needed.
-      \end{proof}
+      Write each line as a countable union of compact interval images.
+      Compact subsets are closed in the Hausdorff ambient space. Pull this
+      countable cover back along a homeomorphism from the plane onto the
+      disk. Baire's theorem on the plane gives a compact piece whose
+      preimage contains a nonempty open ball. This produces a continuous
+      injection of the plane into a point or into $(0,1)$. The former is
+      impossible by cardinality. For the latter, removing a point of the
+      plane leaves it connected, whereas an intermediate value between
+      two image points cannot be omitted. This contradicts injectivity.
+      No Baire assumption on the ambient space is needed.
+    \end{proof}
 
       \begin{lemma}\label{lem:closures-cover}
         \uses{def:subdivision, def:separable}
