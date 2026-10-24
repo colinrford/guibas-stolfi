@@ -183,13 +183,13 @@ result below needs that hypothesis, it is stated explicitly.
     % % % consequences of S4, paper pp. 77--78
     \begin{lemma}\label{lem:simple-path-alternate}
       \uses{def:simple-path}
-      %\lean{GuibasStolfi.SimplePath.alternate}
-
+      \lean{GuibasStolfi.SimplePath.alternate}
+      \leanok
       If $P_i$ is an arc of a simple path, then
-      $\overline{P_i}=P_{i-1}\cup P_i\cup P_{i+1}$.
+      $\overline{P_ } = P_{i - 1} \cup P_i \cup P_{i + 1}$.
     \end{lemma}
     \begin{proof}
-
+      \leanok
       Connectedness of consecutive unions forces each neighboring piece to
       be a singleton in the arc's closure: two disjoint nonempty open arcs
       would disconnect their union. A preconnected subset of the circle
