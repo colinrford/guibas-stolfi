@@ -181,7 +181,7 @@ result below needs that hypothesis, it is stated explicitly.
     Equivalence of these two formulations has not been proved here.
 
     % % % consequences of S4, paper pp. 77--78
-    \begin{lemma}\label{lem:simple-path-alternate}
+    \begin{lemma}[Alternations of points and arcs]\label{lem:simple-path-alternate}
       \uses{def:simple-path}
       \lean{GuibasStolfi.SimplePath.alternate}
       \leanok
@@ -205,14 +205,14 @@ result below needs that hypothesis, it is stated explicitly.
     % % %
     \begin{lemma}\label{lem:arc-image}
       \uses{def:subdivision, lem:simple-path-alternate, def:separable}
-      %\lean{GuibasStolfi.Subdivision.image_arc}
-
+      \lean{GuibasStolfi.Subdivision.image_arc}
+      \leanok
       If $\alpha$ is the arc between two consecutive points $a$ and $b$ of
       $\pi$, then its image $\phi_F(\alpha)$ is an edge incident to the
       points $\phi_F(a)$ and $\phi_F(b)$.
     \end{lemma}
     \begin{proof}
-
+      \leanok
       \uses{lem:incident-of-closure}
       By (ii) and (iii), $\phi_F(\alpha)$ is an edge and $\phi_F(a)$,
       $\phi_F(b)$ are vertices. Since $a \in \overline{\alpha}$ and $\phi_F$
