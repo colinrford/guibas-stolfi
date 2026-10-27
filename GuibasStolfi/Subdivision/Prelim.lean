@@ -41,6 +41,22 @@ lemma Incident.symm {A B : Set M}
   intro hBA
   exact h hBA.symm
 
+/-- if A meets the closure of B, then A and B are incident -/
+lemma incident_of_mem_closure {A B : Set M}
+    (h : (A ∩ closure B).Nonempty) : 
+    Incident A B := by
+  unfold Incident
+  intro hsep
+  obtain ⟨U, hU, V, hV, hUV⟩ := hsep
+  obtain ⟨x, hxA, hxB⟩ := h
+  have hUx : U ∈ 𝓝 x :=
+    mem_nhdsSet_iff_forall.mp hU x hxA
+  obtain ⟨y, hyU, hyB⟩ :=
+    mem_closure_iff_nhds.mp hxB U hUx
+  have hyV : y ∈ V :=
+    subset_of_mem_nhdsSet hV hyB
+  exact hUV.ne_of_mem hyU hyV rfl
+
 end Separation
 
 /-! ## Shapes: points, lines, disks -/

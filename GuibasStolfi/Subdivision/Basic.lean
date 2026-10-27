@@ -340,6 +340,21 @@ variable [TopologicalSpace X] [TopologicalSpace Y]
 def HomeomorphOn (f : X → Y) (s : Set X) (t : Set Y) : Prop :=
   ∃ h : s ≃ₜ t, ∀ x : s, (h x : Y) = f x
 
+/-- homeomorphism on subsets maps its source onto its target -/
+lemma HomeomorphOn.image_eq
+    {f : X → Y} {s : Set X} {t : Set Y}
+    (hf : HomeomorphOn f s t) :
+    f '' s = t := by
+  obtain ⟨h, hh⟩ := hf
+  ext y
+  constructor
+  · rintro ⟨x, hx, rfl⟩
+    simpa [hh] using (h ⟨x, hx⟩).property
+  · intro hy
+    refine ⟨h.symm ⟨y, hy⟩, (h.symm ⟨y, hy⟩).property, ?_⟩
+    rw [← hh]
+    exact congrArg Subtype.val (h.apply_symm_apply ⟨y, hy⟩)
+
 end HomeomorphOn
 
 /-! ## Definition 1.1 Subdivision -/
@@ -380,6 +395,30 @@ variable {M : Type*} [TopologicalSpace M]
 /-- all the vertices, edges and faces of a subdivision -/
 def elements (S : Subdivision M) : Set (Set M) :=
   S.vertices ∪ S.edges ∪ S.faces
+
+variable {S : Subdivision M} {F : Set M}
+
+/-- the boundary path supplied by S4 for a face -/
+noncomputable def path (hF : F ∈ S.faces) : SimplePath :=
+  (S.boundary F hF).choose
+
+/-- characteristic map supplied by S4 for a face -/
+noncomputable def charMap (hF : F ∈ S.faces) : Plane → M :=
+  (S.boundary F hF).choose_spec.choose
+
+/-- the selected path and map satisfy the conditions of S4 -/
+lemma charMap_spec (hF : F ∈ S.faces) :
+    ContinuousOn (S.charMap hF) (Metric.closedBall 0 1) ∧
+    S.charMap hF '' Metric.closedBall 0 1 = closure F ∧
+    HomeomorphOn (S.charMap hF) (Metric.ball 0 1) F ∧
+    (∀ i, IsLine ((S.path hF).elem i) →
+      ∃ e ∈ S.edges,
+        HomeomorphOn (S.charMap hF)
+          (Subtype.val '' (S.path hF).elem i) e) ∧
+    (∀ i, IsPoint ((S.path hF).elem i) →
+      S.charMap hF '' (Subtype.val '' (S.path hF).elem i)
+        ∈ S.vertices) :=
+  (S.boundary F hF).choose_spec.choose_spec
 
 end Subdivision
 
