@@ -420,6 +420,37 @@ lemma charMap_spec (hF : F ∈ S.faces) :
         ∈ S.vertices) :=
   (S.boundary F hF).choose_spec.choose_spec
 
+/-- 
+an arc between consecutive points on a simple path maps onto
+an edge incident to the images of those points
+-/
+lemma image_arc (hF : F ∈ S.faces)
+    {i j : Fin ((S.path hF).m + 1)}
+    (hi : IsLine ((S.path hF).elem i))
+    {a : UnitCircle}
+    (ha : (S.path hF).elem j = {a})
+    (haα : a ∈ closure ((S.path hF).elem i)) :
+    S.charMap hF '' (Subtype.val '' (S.path hF).elem i) ∈ S.edges ∧
+    {S.charMap hF a} ∈ S.vertices ∧
+    Incident {S.charMap hF a}
+      (S.charMap hF '' (Subtype.val '' (S.path hF).elem i)) := by
+  obtain ⟨hc, _, _, hii, hiii⟩ := S.charMap_spec hF
+  obtain ⟨e, he, hφ⟩ := hii i hi
+  have hv := hiii j ⟨a, ha⟩
+  rw [ha, Set.image_singleton, Set.image_singleton] at hv
+  refine ⟨hφ.image_eq ▸ he, hv,
+    incident_of_mem_closure ⟨_, rfl, ?_⟩⟩
+  have hsub :
+      closure (Subtype.val '' (S.path hF).elem i) ⊆
+        Metric.closedBall (0 : Plane) 1 :=
+    closure_minimal
+      (by 
+        rintro _ ⟨x, _, rfl⟩
+        exact Metric.sphere_subset_closedBall x.property)
+      Metric.isClosed_closedBall
+  exact (hc.mono hsub).image_closure
+    ⟨a, closure_subtype.mp haα, rfl⟩
+
 end Subdivision
 
 end GuibasStolfi
