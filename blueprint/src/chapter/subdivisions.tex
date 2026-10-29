@@ -20,12 +20,12 @@ result below needs that hypothesis, it is stated explicitly.
 
     \begin{lemma}\label{lem:incident-of-closure}
       \uses{def:separable}
-      %\lean{GuibasStolfi.incident_of_mem_closure}
-
+      \lean{GuibasStolfi.incident_of_mem_closure}
+      \leanok
       If $A$ meets $\overline{B}$, then $A$ and $B$ are incident.
     \end{lemma}
     \begin{proof}
-
+      \leanok
       Let $x \in A \cap \overline{B}$. Every neighbourhood of $A$ is a
       neighbourhood of $x$, so it meets every neighbourhood of $B$.
     \end{proof}
@@ -223,8 +223,8 @@ result below needs that hypothesis, it is stated explicitly.
     % % %
     \begin{definition}[Bounding path]\label{def:bounding-path}
       \uses{def:subdivision, lem:simple-path-alternate}
-      %\lean{GuibasStolfi.Subdivision.boundingPath}
-
+      \lean{GuibasStolfi.Subdivision.boundingPath}
+      \leanok
       The images of the elements of $\pi$, taken in the order in which they
       occur around $S^1$, form the \emph{bounding path} $\pi_F$ of $F$.
     \end{definition}
@@ -232,14 +232,14 @@ result below needs that hypothesis, it is stated explicitly.
     % % %
     \begin{lemma}\label{lem:face-boundary}
       \uses{def:bounding-path}
-      %\lean{GuibasStolfi.Subdivision.frontier_face,
-      %      GuibasStolfi.Subdivision.isConnected_frontier_face}
-
+      \lean{GuibasStolfi.Subdivision.frontier_face,
+            GuibasStolfi.Subdivision.isConnected_frontier_face}
+      \leanok
       $\pi_F$ is a closed, connected path of edges and vertices of $S$, whose
       union is the boundary $\overline{F} \setminus F$ of $F$.
     \end{lemma}
     \begin{proof}
-
+      \leanok
       \uses{lem:arc-image}
       $\phi_F$ maps $\overline{B_2}$ onto $\overline{F}$ and $B_2$ onto $F$.
       The elements of $\pi$ map to vertices and edges, which are disjoint

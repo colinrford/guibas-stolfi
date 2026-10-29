@@ -5,6 +5,7 @@ public import Mathlib.Order.Setoid.Partition
 public import Mathlib.Analysis.SpecialFunctions.Complex.Circle
 public import Mathlib.Data.ZMod.Defs
 public import Mathlib.Tactic.LinearCombination
+public import Mathlib.Data.List.Cycle
 
 @[expose] public section
 
@@ -450,6 +451,97 @@ lemma image_arc (hF : F ∈ S.faces)
       Metric.isClosed_closedBall
   exact (hc.mono hsub).image_closure
     ⟨a, closure_subtype.mp haα, rfl⟩
+
+/-- partition elements sharing a point are equal -/
+private lemma eq_of_mem
+    {A B : Set M}
+    (hA : A ∈ S.elements)
+    (hB : B ∈ S.elements)
+    {x : M} (hxA : x ∈ A) (hxB : x ∈ B) :
+    A = B :=
+  Setoid.eq_of_mem_eqv_class S.isPartition.2 hA hxA hB hxB
+
+/-- a vertex or edge cannot equal a face -/
+private lemma elem_ne_face
+    {A : Set M}
+    (hA : A ∈ S.vertices ∪ S.edges)
+    (hF : F ∈ S.faces) :
+    A ≠ F := by
+  rintro rfl
+  rcases hA with hv | he
+  · exact
+      (shapes_not_homeomorphic.2.1 _ _
+        (S.isPoint_of_mem _ hv)
+        (S.isDisk_of_mem _ hF)).false
+        (Homeomorph.refl _)
+  · exact
+      (shapes_not_homeomorphic.2.2 _ _
+        (S.isLine_of_mem _ he)
+        (S.isDisk_of_mem _ hF)).false
+        (Homeomorph.refl _)
+
+/-- every point of the boundary circle maps into a vertex or edge -/
+private lemma charMap_mem_elem
+    (hF : F ∈ S.faces) (x : UnitCircle) :
+    ∃ A ∈ S.vertices ∪ S.edges, S.charMap hF x ∈ A := by
+  obtain ⟨_, _, _, hii, hiii⟩ := S.charMap_spec hF
+  obtain ⟨j, hxj⟩ := (S.path hF).exists_mem_elem x
+  rcases (S.path hF).isPoint_or_arc j with hp | ⟨_, hl⟩
+  · exact ⟨_, Or.inl (hiii j hp),
+      ⟨x, ⟨x, hxj, rfl⟩, rfl⟩⟩
+  · obtain ⟨e, he, hφ⟩ := hii j hl
+    exact ⟨e, Or.inr he,
+      hφ.image_eq ▸ ⟨x, ⟨x, hxj, rfl⟩, rfl⟩⟩
+
+/-- the characteristic map sends the circle onto the face boundary -/
+lemma charMap_image_sphere (hF : F ∈ S.faces) :
+    S.charMap hF '' Metric.sphere 0 1 = closure F \ F := by
+  obtain ⟨_, himg, hi, _, _⟩ := S.charMap_spec hF
+  rw [← himg, ← Metric.ball_union_sphere, Set.image_union,
+    hi.image_eq, Set.union_sdiff_left]
+  refine (sdiff_eq_left.mpr (Set.disjoint_left.mpr ?_)).symm
+  rintro _ ⟨x, hx, rfl⟩ hxF
+  obtain ⟨A, hA, hxA⟩ :=
+    S.charMap_mem_elem hF ⟨x, hx⟩
+  apply S.elem_ne_face hA hF
+  apply S.eq_of_mem ?_ (Or.inr hF) hxA hxF
+  rcases hA with hv | he
+  · exact Or.inl (Or.inl hv)
+  · exact Or.inl (Or.inr he)
+
+/-- cyclic sequence of images of boundary pieces of a face -/
+noncomputable def boundingPath (hF : F ∈ S.faces) : Cycle (Set M) :=
+  (List.ofFn fun i =>
+    S.charMap hF '' (Subtype.val '' (S.path hF).elem i) :
+      Cycle (Set M))
+
+/-- union of bounding-path pieces is face boundary -/
+lemma frontier_face (hF : F ∈ S.faces) :
+    closure F \ F = ⋃₀ { s | s ∈ S.boundingPath hF} := by
+  rw [← S.charMap_image_sphere hF]
+  ext y
+  simp only [boundingPath, Set.mem_sUnion, mem_ofPred_eq,
+    Cycle.mem_coe_iff, List.mem_ofFn]
+  constructor
+  · rintro ⟨x, hx, rfl⟩
+    obtain ⟨j, hxj⟩ :=
+      (S.path hF).exists_mem_elem ⟨x, hx⟩
+    exact ⟨_, ⟨j, rfl⟩,
+      ⟨x, ⟨⟨x, hx⟩, hxj, rfl⟩, rfl⟩⟩
+  · rintro ⟨t, ⟨i, rfl⟩, hy⟩
+    obtain ⟨_, ⟨z, _, rfl⟩, rfl⟩ := hy
+    exact ⟨z, z.property, rfl⟩
+
+/-- the face boundary is connected -/
+lemma isConnected_frontier_face (hF : F ∈ S.faces) :
+    IsConnected (closure F \ F) := by
+  have hrank : 1 < Module.rank ℝ Plane := by
+    rw [Complex.rank_real_complex]
+    norm_num
+  rw [← S.charMap_image_sphere hF]
+  exact (isConnected_sphere hrank 0 zero_le_one).image _
+    ((S.charMap_spec hF).1.mono Metric.sphere_subset_closedBall)
+
 
 end Subdivision
 
