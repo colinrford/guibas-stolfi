@@ -542,6 +542,93 @@ lemma isConnected_frontier_face (hF : F ∈ S.faces) :
   exact (isConnected_sphere hrank 0 zero_le_one).image _
     ((S.charMap_spec hF).1.mono Metric.sphere_subset_closedBall)
 
+/-- Every point of the manifold belongs to the closure of some face. -/
+lemma iUnion_closure_faces [T2Space M] :
+    ⋃ F ∈ S.faces, closure F = Set.univ := by
+  apply Set.eq_univ_of_forall
+  intro x
+  by_contra hx
+  have hW : IsOpen (⋃ F ∈ S.faces, closure F)ᶜ :=
+    (S.finite_faces.isClosed_biUnion
+      fun F _ => isClosed_closure).isOpen_compl
+  obtain ⟨D, hDW, _, _, hD⟩ :=
+    S.isTwoManifold.exists_disk_subset hW hx
+  refine not_disk_subset_finite_union hD
+    (S.finite_vertices.union S.finite_edges) ?_ ?_
+  · rintro s (hs | hs)
+    · exact Or.inl (S.isPoint_of_mem s hs)
+    · exact Or.inr (S.isLine_of_mem s hs)
+  · intro y hy
+    obtain ⟨A, ⟨hA, hyA⟩, _⟩ := S.isPartition.2 y
+    rcases hA with hA | hA
+    · exact ⟨A, hA, hyA⟩
+    · exact
+        (hDW hy (Set.mem_biUnion hA (subset_closure hyA))).elim
+
+/-- Every subdivision element is incident to some face. -/
+lemma exists_face_incident [T2Space M]
+    {A : Set M} (hA : A ∈ S.elements) :
+    ∃ F ∈ S.faces, Incident A F := by
+  have hne : A.Nonempty := by
+    apply Set.nonempty_iff_ne_empty.mpr
+    intro hempty
+    exact S.isPartition.1 (hempty ▸ hA)
+  obtain ⟨x, hxA⟩ := hne
+  have hxcover : x ∈ ⋃ F ∈ S.faces, closure F := by
+    rw [iUnion_closure_faces (S := S)]
+    trivial
+  obtain ⟨F, hFx⟩ := Set.mem_iUnion.mp hxcover
+  obtain ⟨hF, hxF⟩ := Set.mem_iUnion.mp hFx
+  exact ⟨F, hF, incident_of_mem_closure ⟨x, hxA, hxF⟩⟩
+
+/-- Every edge lies entirely in the boundary of some face. -/
+lemma edge_subset_frontier [T2Space M]
+    {e : Set M} (he : e ∈ S.edges) :
+    ∃ F ∈ S.faces, e ⊆ closure F \ F := by
+  have hne : e.Nonempty := by
+    apply Set.nonempty_iff_ne_empty.mpr
+    intro hempty
+    exact S.isPartition.1
+      (hempty ▸ Or.inl (Or.inr he))
+  obtain ⟨x, hx⟩ := hne
+  have hxcover : x ∈ ⋃ F ∈ S.faces, closure F := by
+    rw [iUnion_closure_faces (S := S)]
+    trivial
+  obtain ⟨F, hFx⟩ := Set.mem_iUnion.mp hxcover
+  obtain ⟨hF, hxF⟩ := Set.mem_iUnion.mp hFx
+  have hxF' : x ∉ F := by
+    intro hxface
+    exact S.elem_ne_face (Or.inr he) hF
+      (S.eq_of_mem (Or.inl (Or.inr he))
+        (Or.inr hF) hx hxface)
+  refine ⟨F, hF, ?_⟩
+  rw [← S.charMap_image_sphere hF]
+  obtain ⟨y, hy, rfl⟩ :
+      x ∈ S.charMap hF '' Metric.sphere 0 1 :=
+    S.charMap_image_sphere hF ▸ ⟨hxF, hxF'⟩
+  obtain ⟨_, _, _, hii, hiii⟩ := S.charMap_spec hF
+  obtain ⟨j, hyj⟩ :=
+    (S.path hF).exists_mem_elem ⟨y, hy⟩
+  rcases (S.path hF).isPoint_or_arc j with hp | ⟨_, hl⟩
+  · exfalso
+    have hv := hiii j hp
+    have hve := S.eq_of_mem
+      (Or.inl (Or.inl hv))
+      (Or.inl (Or.inr he))
+      ⟨y, ⟨⟨y, hy⟩, hyj, rfl⟩, rfl⟩ hx
+    have hpoint : IsPoint e :=
+      hve ▸ S.isPoint_of_mem _ hv
+    exact
+      (shapes_not_homeomorphic.1 e e hpoint
+        (S.isLine_of_mem e he)).false (Homeomorph.refl e)
+  · obtain ⟨e', he', hφ⟩ := hii j hl
+    obtain rfl : e' = e := S.eq_of_mem
+      (Or.inl (Or.inr he'))
+      (Or.inl (Or.inr he))
+      (hφ.image_eq ▸ ⟨y, ⟨⟨y, hy⟩, hyj, rfl⟩, rfl⟩) hx
+    rw [← hφ.image_eq]
+    rintro _ ⟨_, ⟨z, _, rfl⟩, rfl⟩
+    exact ⟨z, z.property, rfl⟩
 
 end Subdivision
 
